@@ -7,8 +7,11 @@ void Application::Run()
 	
 	while(1)
 	{
+		cout << "\n\t=====================\n";
+		m_curFolder->DisplayPathOnScreen();
+		cout << "\t=====================";
 		m_Command = GetCommand();
-
+		
 		switch(m_Command)
 		{
 		case 1:		// read a record and add to list.
@@ -24,13 +27,16 @@ void Application::Run()
 			RetrieveFolderByName();
 			break;
 		case 5:		
-			//최근 열어본 폴더(큐 사용)
+			RecentRecord();
 			break;
 		case 6:		//replace
 			DisplayProperty();
 			break;
 		case 7:		// display all the records in list on screen.
-			//상위 폴더로 이동.
+			MoveBack();
+			break;
+		case 8:
+			DisplayAllFolders();
 			break;
 		case 0:
 			return;
@@ -60,6 +66,7 @@ int Application::GetCommand()
 	cout << "\t   5 : 최근 열어본 폴더" << endl;
 	cout << "\t   6 : 현재 폴더 속성" << endl;
 	cout << "\t   7 : 상위 폴더로 이동" << endl;
+	cout << "\t   8 : 하부 폴더 목록 보기" << endl;
 	cout << "\t   0 : 종료" << endl; 
 
 	cout << endl << "\t Choose a Command--> ";
@@ -101,6 +108,11 @@ int Application::OpenFolder() {
 	int index = m_curFolder->SearchFolder(temp);
 	if ( index!= 0) {
 		m_curFolder = temp;
+		int result=Addque(m_curFolder);
+		if (result == 0) {
+			Subque();
+			Addque(m_curFolder);
+		}
 		return 1;
 	}
 	else {
@@ -109,6 +121,31 @@ int Application::OpenFolder() {
 	}
 }
 
+int Application::Addque(FolderType* indata) {
+	m_RecentlyFolder.enque(indata);
+	UpperLower.enque(indata);
+	return 1;
+}
+
+int Application::Subque() {
+	FolderType temp;
+	m_RecentlyFolder.deque();
+	return 1;
+}
+int Application::RecentRecord() {
+	cout << "\t=====최근 열어본 폴더=====\n";
+	m_RecentlyFolder.print();
+	cout << "\t==========================\n";
+	return 1;
+}
+
+int Application::MoveBack() {
+	int index=UpperLower.Getindex()-1;
+	m_curFolder = UpperLower.Get(index);
+	Addque(m_curFolder);
+	UpperLower.DecreaseIndex();
+	return 1;
+}
 //id로 item을 찾아 출력한다.
 /*
 int Application::SearchFolderByName(FolderType& item)//여기를 수정하자.

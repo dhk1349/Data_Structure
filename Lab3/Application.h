@@ -24,6 +24,7 @@ public:
 		m_RootFolder.SetRecord("Root", "Root", 0);
 		m_curFolder = new FolderType;
 		m_curFolder = &m_RootFolder;
+		Addque(m_curFolder);
 		m_Command = 0;
 	}
 	
@@ -95,6 +96,37 @@ public:
 */
 	int DisplayAllFolders();
 
+	/**
+*	@brief m_RecentlyFolder에 기록을 추가한다.
+*	@pre	폴더를 열 때 작동된다.
+*	@post	열었던 폴더 기록이 m_RecentlyFolder에 저장된다.
+*	@return	1을 반환한다.
+*/
+	int Addque(FolderType* indata);
+
+	/**
+*	@brief m_RecentlyFolder에 기록을 추가한다.
+*	@pre	없음
+*	@post	열었던 폴더 기록이 m_RecentlyFolder에서 맨 앞에 있는 기록이 사라진다.
+*	@return	1을 반환한다.
+*/
+	int Subque();
+
+	/**
+*	@brief 상위폴더로 이동.
+*	@pre	이동할 상위폴더가 존재한다.
+*	@post	상위폴더로 이동한다.
+*	@return	1을 반환한다.
+*/
+	int MoveBack();
+	/**
+*	@brief 최근 폴더 정보를 화면에 출력한다.
+*	@pre	없음
+*	@post	최근 열었던 폴더 정보가 화면에 출력.
+*	@return	1을 반환한다.
+*/
+	int RecentRecord();
+
 	//int OpenOutFile(char *fileName);
 
 	/**
@@ -155,13 +187,13 @@ public:
 	//int SearchItemByBinarySearch();
 
 private:
-	ifstream m_InFile;		///< input file descriptor.
-	ofstream m_OutFile;		///< output file descriptor.
-	ArrayList<FolderType> m_List;		///< item list.
-	int m_Command;			///< current command number.
+	//ifstream m_InFile;		
+	//ofstream m_OutFile;		
+	int m_Command;			
 	FolderType *m_curFolder;
 	FolderType m_RootFolder;
 	Queue<FolderType> m_RecentlyFolder;
+	Queue<FolderType> UpperLower;
 };
 
 #endif	// _APPLICATION_H
