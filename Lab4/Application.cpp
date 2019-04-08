@@ -20,7 +20,7 @@ void Application::Run()
 		case 2:		//search by id.
 			DeleteFolder();
 			break;
-		case 3:	//search by binary search.
+		case 3:	
 			OpenFolder();
 			break;
 		case 4:		//search by name.
@@ -36,7 +36,7 @@ void Application::Run()
 			MoveBack();
 			break;
 		case 8:
-			DisplayAllFolders();
+			DisplayAll();
 			break;
 		case 9:
 			BinarySearch();
@@ -47,6 +47,15 @@ void Application::Run()
 		case 11:
 			OpenText();
 			break;
+		case 12:
+			ChangeFolderName();
+			break;
+		case 13:
+			ChangeFilename();
+			break;
+		case 14:
+			DeleteFile();
+			break;
 		case 0:
 			return;
 		default:
@@ -55,8 +64,9 @@ void Application::Run()
 		}
 	}
 }
-int Application::DisplayAllFolders() {
+int Application::DisplayAll() {
 	m_curFolder->DisplayAllFolderName();
+	m_curFolder->DisplayAllFileName();
 	return 1;
 }
 
@@ -75,10 +85,13 @@ int Application::GetCommand()
 	cout << "\t   5 : 최근 열어본 폴더" << endl;
 	cout << "\t   6 : 현재 폴더 속성" << endl;
 	cout << "\t   7 : 상위 폴더로 이동" << endl;
-	cout << "\t   8 : 하부 폴더 목록 보기" << endl;
+	cout << "\t   8 : 하부 목록 보기" << endl;
 	cout << "\t   9 : 폴더 이진 검색" << endl;
 	cout << "\t  10 : 텍스트 파일 만들기" << endl;
 	cout << "\t  11 : 텍스트 파일 열기" << endl;
+	cout << "\t  12 : 폴더 이름 바꾸기" << endl;
+	cout << "\t  13 : 파일 이름 바꾸기" << endl;
+	cout << "\t  14 : 파일 삭제하기" << endl;
 	cout << "\t   0 : 종료" << endl; 
 
 	cout << endl << "\t Choose a Command--> ";
@@ -105,16 +118,20 @@ int Application::DisplayProperty()
 	return 1;
 }
 
-
 int Application::DeleteFolder() {
 	int result=m_curFolder->DeleteFolders();
+	return result;
+}
+
+int Application::DeleteFile() {
+	int result = m_curFolder->DeleteFile();
 	return result;
 }
 
 //하부폴더로 들어가는 함수.
 
 int Application::OpenFolder() {
-	DisplayAllFolders();
+	DisplayAll();
 	FolderType* temp;
 	temp = new FolderType;
 	int index = m_curFolder->SearchFolder(temp);
@@ -166,6 +183,17 @@ int Application::CreateText() {
 
 int Application::OpenText() {
 	m_curFolder->Opentext();
+	return 1;
+}
+
+int Application::ChangeFolderName() {
+	m_curFolder->ChagneSubfolderName();
+	m_curFolder->DisplayAllFolderName();
+	return 1;
+}
+int Application::ChangeFilename() {
+	m_curFolder->ChangeFileName();
+	m_curFolder->DisplayAllFileName();
 	return 1;
 }
 /*

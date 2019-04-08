@@ -88,13 +88,14 @@ public:
 */
 	int DeleteFolder();
 
+	int DeleteFile();
 	/**
 *	@brief 서브폴더의 정보를 모두 출력
 *	@pre	없음
 *	@post	모든 서브 폴더의 정보가 출력된다.
 *	@return	1을 반환한다.
 */
-	int DisplayAllFolders();
+	int DisplayAll();
 
 	/**
 *	@brief m_RecentlyFolder에 기록을 추가한다.
@@ -141,6 +142,10 @@ public:
 	int CreateText();
 
 	int OpenText();
+
+	int ChangeFolderName();
+
+	int ChangeFilename();
 private:
 	//ifstream m_InFile;		
 	//ofstream m_OutFile;		

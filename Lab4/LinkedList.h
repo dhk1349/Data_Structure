@@ -269,6 +269,7 @@ int LinkedList<T>::Replace(T item)
 		if (item.GetName() == location->data.GetName())
 		{
 			found = true;
+			item.SetNameFromKB();
 			location->data.Setname( item.GetName());
 		}	//일치하는 항목을 찾았을 때 found의 값을 변경해주고 리스트의 항목에 item을 복사해준다.
 		else

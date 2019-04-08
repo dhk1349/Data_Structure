@@ -43,7 +43,7 @@ public:
 		access = in;
 	}
 
-	void SetnameFromKB() {
+	void SetNameFromKB() {
 		string temp;
 		cout << "\t파일 이름 입력: ";
 		cin >> temp;

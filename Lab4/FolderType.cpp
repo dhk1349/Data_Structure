@@ -6,7 +6,7 @@ int FolderType::AddFolder() {
 		
 	FolderType data;
 	data.SetNameFromKB();
-	data.Setpath(path+"/"+data.name);
+	data.Setpath(path+"\\"+data.name);
 	if (fdFolderList->Add(data)==1) {
 		subfoldernum++;
 		memory++;
@@ -22,7 +22,7 @@ int FolderType::AddFolder() {
 int FolderType::Addtextfile() {
 	FolderType mock;
 	mock.SetNameFromKB();
-	mock.Setpath(path+"/"+mock.name);
+	mock.Setpath(path+"\\"+mock.name);
 
 	//txt를 넣는 곳
 	FileType data;
@@ -36,11 +36,11 @@ int FolderType::Addtextfile() {
 			textname[i] = '+';
 		}
 	}
-	textname += data.GetName();
 	ofstream outdata;
 	outdata.open(textname+".txt");
 	data.Setaccess(textname);
 	string test;
+	cout << textname<<"으로 저장할거다\n";
 	cout << "EXIT을 입력하면 종료\n";
 	while (true) {
 		getline(cin, test);
@@ -136,6 +136,27 @@ int FolderType::DeleteFolders() {
 	}
 	return result;
 }
+
+int FolderType::DeleteFile() {
+	FileType temp;
+	temp.SetNameFromKB();
+
+	int result = fdFileList->Delete(temp);
+	if (result == 0) {
+		cout << "\t=====[ERROR]=====\n";
+		cout << "\t=There is no such file!!=\n";
+		DisplayAllFolderName();
+		DisplayAllFileName();
+	}
+	else {
+		cout << "\tDeleted Successfully!\n";
+		filenum--;
+		memory--;
+		DisplayAllFolderName();
+		DisplayAllFileName();
+	}
+	return result;
+}
 // Set student id from keyboard.
 void FolderType::SetNameFromKB()
 {
@@ -214,17 +235,19 @@ int FolderType::Opentext() {
 	}
 	textname += data.GetName();
 	temp->Setname(data.GetName());
-	temp->Setaccess(textname);
 
 	if (fdFileList->Get(*temp) == 1) {//찾았을 때
 		cout << "\tFound\n";
 		ifstream indata;
-		indata.open(temp->Getaccess()+".txt");
+		indata.open(temp->Getaccess() + ".txt");
+		if (!indata.is_open()) {
+			cout << "\t파일이 안열렸어요,,\n";
+		}
 		string temp;
 		while (indata.peek() != EOF) {
 			// std::getline은 입력 스트림에서 string으로 한 줄을 읽습니다.
 			getline(indata, temp);
-			cout << temp << endl;
+			cout <<"\t"<< temp << endl;
 		}
 		return 1;
 	}
@@ -234,6 +257,24 @@ int FolderType::Opentext() {
 	}
 
 
+}
+
+int FolderType::ChagneSubfolderName() {
+	FolderType temp;
+	DisplayAllFolderName();
+	cout << "\t이름 바꿀 폴더 선택\n";
+	temp.SetNameFromKB();
+	fdFolderList->Replace(temp);
+	return 0;
+}
+
+int FolderType::ChangeFileName() {
+	FileType temp;
+	DisplayAllFileName();
+	cout << "\t바꿀 파일 선택\n";
+	temp.SetNameFromKB();
+	fdFileList->Replace(temp);
+	return 0;
 }
 
 // Compare two itemtypes.

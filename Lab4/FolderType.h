@@ -64,6 +64,7 @@ public:
 	*/
 	int DeleteFolders();
 
+	int DeleteFile();
 	/**
 	*	@brief	폴더를 폴더명으로 검색한다.
 	*	@pre	사용자로부터 검색할 검색어을 받는다.
@@ -346,6 +347,9 @@ public:
 	int Addtextfile();
 	int Opentext();
 	void DisplayAllFileName();
+
+	int ChagneSubfolderName();
+	int ChangeFileName();
 protected:
 	string name;		
 	string path;	
