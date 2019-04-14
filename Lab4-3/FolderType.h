@@ -71,7 +71,7 @@ public:
 *	@param	없음
 *	@return 1을 반환한다.
 */
-	int DeleteFile();
+	int DeleteFiles();
 
 	/**
 	*	@brief	폴더를 폴더명으로 검색한다.
@@ -340,10 +340,18 @@ public:
 *	@pre	서브폴더가 초기화되어있다.
 *	@post	찾는 폴더가 있다면 temp해 해당 폴더가 복사된다.
 *	@param	temp에 해당 서브폴더의 정보를 넣는다.
-*	@return	해당 서브 폴더의 인덱스가 리턴되며, 해당 서브폴더가 없으면 -1을 리턴
+*	@return	찾으려고 했던 폴더가 리턴되며, 찾지 못하면 NULL이 리턴된다.
 */
 	FolderType* SearchFolder(FolderType *temp);
 
+	/**
+*	@brief	하부파일을 검색
+*	@pre	없음
+*	@post	찾는 파일이 있다면 temp해 해당 파일이 복사된다.
+*	@param	temp에 검색할 파일 정보를 넣는다.
+*	@return	찾으려고 했던 파일이 리턴되며, 찾지 못하면 NULL이 리턴된다
+*/
+	FileType* SearchFile(FileType *temp);
 	/**
 *	@brief	하부폴더를 이진 검색으로 검색
 *	@pre	서브폴더가 초기화되어있다.
@@ -396,7 +404,25 @@ public:
 */
 	int ChangeFileName();
 
+	/**
+*	@brief	하부 폴더에 indata로 입력 받은 폴더를 생성한다.
+*	@pre	없음
+*	@post	indata와 동일한 정보의 폴더가 하부 폴더에 생성된다.
+*  @params indata를 하부 폴더에 생성한다.
+*	@return 1을 리턴
+*/
 	int PaseteFolder(FolderType* indata);
+
+	/**
+*	@brief	해당 폴더에 음악 추가
+*	@pre	저장할 수 있는 노래의 목록이 지정되어있다.
+*	@post	지정한 음악이 폴더 내부에 추가된다.
+*  @params 없음.
+*	@return 추가되면 1을 리턴, 그렇지 않으면 0을 리턴
+*/
+	int IncludeMusic();
+
+
 protected:
 	string name;		
 	string path;	

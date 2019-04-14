@@ -13,6 +13,7 @@ private:
 	string path ;
 	string time ;
 	string access ;
+	string ext;
 public:
 	/**
 	*	default constructor.
@@ -22,16 +23,31 @@ public:
 		path = "";
 		time = "";
 		 access= "";
+		 ext = "";
 	}
 
 	/**
 	*	destructor.
 	*/
 	~FileType() {}
+	/**
+*	@brief 해당 파일의 이름 정보를 받는다.
+*	@pre	없음
+*	@post	해당 파일의 name이 리턴된다.
+*	@return	name
+*/
 	string GetName() {
 		return name;
 	}
-
+	/**
+*	@brief 해당 파일의 확장자 정보를 받는다.
+*	@pre	없음
+*	@post	해당 파일의 ext이 리턴된다.
+*	@return	ext
+*/
+	string GetExt() {
+		return ext;
+	}
 	/**
 	*	@brief 해당 파일의 경로 정보를 받는다.
 	*	@pre	없음
@@ -95,7 +111,17 @@ public:
 	void Setaccess(string in) {
 		access = in;
 	}
-
+	/**
+*	@brief 해당 파일의 ext 변수 값을 설정한다.
+*	@pre	없음
+*	@post	해당 파일의 ext변수가 설정된다.
+*	@param stirng in이 ext변수의 내용이 된다.
+*	@return	없음
+*/
+	void Setext(string in) {
+		ext = in;
+	}
+	 
 	/**
 *	@brief 해당 파일의 이름을 키보드로 설정한다.
 *	@pre	없음

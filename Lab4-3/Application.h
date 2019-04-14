@@ -4,11 +4,14 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-using namespace std;
 #include "Queue.h"
 #include "LinkedList.h"
 #include "FolderType.h"
 #include "Stack.h"
+#include <Windows.h>
+#include <MMsystem.h>
+#include <conio.h>
+using namespace std;
 #define FILENAMESIZE 1024
 
 /**
@@ -96,7 +99,7 @@ public:
 *	@post	주어진 이름의 파일가 삭제된다.
 *	@return	삭제된 파일 없으면 0을, 삭제된 파일이 있으면 1을 반환.
 */
-	int DeleteFile();
+	int Delete_File();
 	/**
 *	@brief 서브폴더의 정보를 모두 출력
 *	@pre	없음
@@ -185,9 +188,38 @@ public:
 */
 	int ChangeFilename();
 
-	void PrintUpperLower();
+	/**
+*	@brief 지정한 폴더를 copyspace라는 폴더에 저장한다. (복사)
+*	@pre	지정할 폴더가 존재한다.
+*	@post	지정한 폴더가 copyspace라는 공간에 저장된다.
+*	@return	없음
+*/
 	void CopyFolder();
+
+	/**
+*	@brief m_curFolder에 복사해놓은 폴더를 붙여넣는다.
+*	@pre 없음
+*	@post	현재 폴더에 복사해 놓은 폴더가 붙어넣어진다.
+*	@return	없음
+*/
 	void PasteFolder();
+
+	/**
+*	@brief 들여올 수 있는 음악을 해당폴더에 가져와서 저장한다.
+*	@pre 없음
+*	@post	현재 폴더에 지정한 음악이 저장된다.
+*	@return	없음
+*/
+	void ImportMusic();
+
+	/**
+*	@brief 해당 폴더 내부에 있는 음악을 재생한다.
+*	@pre 재생할 음악이 폴더 내부에 존재한다.
+*	@post	현재 폴더에 지정한 음악이 재생된다.
+*	@return	
+*/
+	int PlayMusic();
+
 private:
 	//ifstream m_InFile;		
 	//ofstream m_OutFile;		

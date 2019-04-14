@@ -47,7 +47,7 @@ int FolderType::Addtextfile() {
 	data.Setname(mock.GetName());
 	data.Setpath(mock.GetPath());
 	data.Settime(mock.Gettime()) ;
-
+	data.Setext(".txt");
 	string textname=data.Getpath();
 	for (int i = 0; i < textname.length(); i++) {
 		if (textname[i] == '\\') {
@@ -58,7 +58,6 @@ int FolderType::Addtextfile() {
 	outdata.open(textname+".txt");
 	data.Setaccess(textname);
 	string test;
-	cout << textname<<"으로 저장할거다\n";
 	cout << "EXIT을 입력하면 종료\n";
 	while (true) {
 		getline(cin, test);
@@ -155,7 +154,7 @@ int FolderType::DeleteFolders() {
 	return result;
 }
 
-int FolderType::DeleteFile() {
+int FolderType::DeleteFiles() {
 	FileType temp;
 	temp.SetNameFromKB();
 
@@ -219,6 +218,10 @@ FolderType* FolderType::SearchFolder(FolderType *temp) {
 	return  fdFolderList->Get(temp);
 }
 
+FileType* FolderType::SearchFile(FileType *temp) {
+	temp->SetNameFromKB();
+	return  fdFileList->Get(temp);
+}
 
 int FolderType::SearchFolderBinary(FolderType *temp) {
 	/*
@@ -295,6 +298,55 @@ int FolderType::ChangeFileName() {
 	return 0;
 }
 
+int FolderType::IncludeMusic() {
+	ifstream indata;
+	indata.open("PlayList.txt");
+	string temp;
+	while (indata.peek() != EOF) {
+		// std::getline은 입력 스트림에서 string으로 한 줄을 읽습니다.
+		getline(indata, temp);
+		cout << "\t" << temp << endl;
+	}
+	indata.close();
+	string inmusic;
+	cout << "\t추가할 음악을 선택하세요.\n";
+	cout << "\t";
+	cin >> inmusic;
+
+	indata.open("PlayList.txt");
+	bool add = false;
+	while (indata.peek() != EOF) {
+		// std::getline은 입력 스트림에서 string으로 한 줄을 읽습니다.
+		getline(indata, temp);
+		if (temp==inmusic) {
+			add = true;
+			break;
+		}
+	}
+	indata.close();
+
+	if (add==true) {
+		FolderType mock;
+		mock.Setname(inmusic);
+		mock.Setpath(path + "\\" + mock.name);
+
+		//txt를 넣는 곳
+		FileType data;
+		data.Setname(mock.GetName());
+		data.Setpath(mock.GetPath());
+		data.Settime(mock.Gettime());
+		data.Setext("wav");
+		fdFileList->Add(data);
+		filenum++;
+		DisplayAllFolderName();
+		DisplayAllFileName();
+		return 1;
+	}
+	else {
+		cout << "\t그런 이름의 음악을 추가할 수 없습니다.\n";
+		return 0;
+	}
+}
 // Compare two itemtypes.
 RelationType FolderType::CompareByID(const FolderType &data)
 {

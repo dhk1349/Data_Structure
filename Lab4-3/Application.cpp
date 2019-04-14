@@ -63,10 +63,13 @@ void Application::Run()
 			ChangeFilename();
 			break;
 		case 17:
-			DeleteFile();
+			Delete_File();
 			break;
-		case 999:
-			PrintUpperLower();
+		case 18:
+			ImportMusic();
+			break;
+		case 19:
+			PlayMusic();
 			break;
 		case 0:
 			return;
@@ -107,6 +110,9 @@ int Application::GetCommand()
 	cout << "\t  15 : 폴더 이름 바꾸기" << endl;
 	cout << "\t  16 : 파일 이름 바꾸기" << endl;
 	cout << "\t  17 : 파일 삭제하기" << endl;
+	cout << "\t  18 : 음악 추가하기" << endl;
+	cout << "\t  19 : 음악 재생하기" << endl;
+
 	cout << "\t   0 : 종료" << endl; 
 
 	cout << endl << "\t Choose a Command--> ";
@@ -138,8 +144,8 @@ int Application::DeleteFolder() {
 	return result;
 }
 
-int Application::DeleteFile() {
-	int result = m_curFolder->DeleteFile();
+int Application::Delete_File() {
+	int result = m_curFolder->DeleteFiles();
 	return result;
 }
 
@@ -226,10 +232,6 @@ int Application::ChangeFilename() {
 	return 1;
 }
 
-void Application :: PrintUpperLower() {
-	UpperLower.print();
-
-}
 
 void Application::CopyFolder() {
 	DisplayAll();
@@ -245,6 +247,36 @@ void Application::PasteFolder() {
 	else {
 		cout << "\t복사된 내용이 없습니다!!\n";
 	}
+}
+
+void Application::ImportMusic() {
+	m_curFolder->IncludeMusic();
+}
+
+int Application::PlayMusic() {
+	m_curFolder->DisplayAllFileName();
+	cout << "\t재생할 음악을 선택하세요(음악이 아니면 재생되지 않음)\n ";
+	FileType* temp;
+	temp = new FileType;
+	temp = m_curFolder->SearchFile(temp);
+	if (temp!=NULL) {
+		if (temp->GetExt()=="wav") {
+			//음악재생
+			cout << "\t아무 키나 누르면 재생이 종료됩니다.\n";
+			LPCWSTR name = (LPCWSTR)(temp->GetName()+".wav").c_str();
+			string Linname = temp->GetName() + ".wav";
+			PlaySound(TEXT("SOLO-제니.wav"), NULL, SND_ALIAS | SND_APPLICATION);
+			while (!_kbhit());
+			PlaySound(NULL, 0, 0);
+			return 1;
+		}
+		else {
+			cout << "해당 파일의 형식은: "<<temp->GetExt()<<"\n";
+			cout << "\t형식이 일치하지 않습니다.\n";
+			return 1;
+		}
+	}
+	else { cout << "\t해당 파일을 찾을 수 없습니다.\n"; return 1; }
 }
 /*
 int Application::ChangeName() {
