@@ -263,9 +263,17 @@ int Application::PlayMusic() {
 		if (temp->GetExt()=="wav") {
 			//음악재생
 			cout << "\t아무 키나 누르면 재생이 종료됩니다.\n";
-			LPCWSTR name = (LPCWSTR)(temp->GetName()+".wav").c_str();
-			string Linname = temp->GetName() + ".wav";
-			PlaySound(TEXT("SOLO-제니.wav"), NULL, SND_ALIAS | SND_APPLICATION);
+
+			
+			string inname = temp->GetName() + ".wav";
+
+			char buffer[MAX_PATH];
+			GetModuleFileNameA(NULL, buffer, MAX_PATH);
+			string::size_type pos = string(buffer).find_last_of("\\/");
+			inname = string(buffer).substr(0, pos) + "\\" + inname;
+			LPCSTR song = inname.c_str();
+
+			PlaySound(song, NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 			while (!_kbhit());
 			PlaySound(NULL, 0, 0);
 			return 1;

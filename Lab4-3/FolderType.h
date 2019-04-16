@@ -10,6 +10,7 @@
 #include<sstream>
 #include "LinkedList.h"
 #include"FileType.h"
+#include "AllType.h"
 using namespace std;
 
 /**
@@ -21,7 +22,7 @@ enum RelationType {LESS, GREATER, EQUAL};
 /**
 *	item information class.
 */
-class FolderType
+class FolderType:public AllType
 {
 public:
 	/**

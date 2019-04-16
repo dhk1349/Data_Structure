@@ -4,10 +4,10 @@
 
 #include<iostream>
 #include<string>
+#include "AllType.h"
 using namespace std;
 
-class FileType 
-{
+class FileType : public AllType{	
 private:
 	string name ;
 	string path ;

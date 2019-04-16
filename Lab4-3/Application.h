@@ -1,5 +1,6 @@
 #ifndef _APPLICATION_H
 #define _APPLICATION_H
+#define MAX_PATH 2
 
 #include <iostream>
 #include <fstream>
