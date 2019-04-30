@@ -312,11 +312,11 @@ T* LinkedList<T>::Get(T* item)
 			moreToSearch = (location != NULL);
 		}	//찾지 못했을 때 다음 항목으로 location을 옮기고 그 값이 NULL이면 리스트의 끝이므로 moreToSearch의 값을 변경해준다.
 	}
-
-	if (found)
-		return item;
-	else
-		return NULL;	//찾으면 1, 그렇지 못하면 0을 리턴한다.
+    
+    if (found)
+        return item;
+    else
+        return NULL;    //찾으면 1, 그렇지 못하면 0을 리턴한다.
 }
 
 
