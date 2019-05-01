@@ -20,7 +20,7 @@ public:
 	void InsertItem(T item);
 	void DeleteItem(T item);
 	void ResetList();
-	void GetNextItem(T& item);
+	bool GetNextItem(T& item);
 	void print() {
 		for (int i = 0; i < length; i++) {
 			cout << i + 1 << " th data\n";
@@ -61,7 +61,30 @@ template<typename T>
 void SortedList<T>::RetrieveItem(T& item, bool & found) {
 	//BinarySearch
 	found = false;
-
+	bool moretosearch = true;
+	int start = 0;
+	int end = length - 1;
+	int mid;
+	while (!found && moretosearch) {
+		mid = (start + end) / 2;
+		if (info[mid] == item) {
+			found = true;
+			item = info[mid];
+		}
+		else if (item>info[mid]) {
+			start = mid;
+		}
+		else {
+			end = mid;
+		}
+		if (mid==start) {
+			moretosearch = false;
+		}
+	}
+	if (found) { cout << "\titem found\n"; }
+	else {
+		cout << "\titem not found!\n";
+	}
 }
 
 template<typename T>
@@ -94,18 +117,22 @@ void SortedList<T>::InsertItem(T item) {
 
 template<typename T>
 void SortedList<T>::DeleteItem(T item) {
-	T temp;
+	T  temp;
+	bool found = false;
+	int count = -1;
 	ResetList();
-	while (true) {
-		GetNextItem(temp);
-		if (temp.name == item.name) {//deleting
-			info[current_pos] = info[length - 1];
+	while (GetNextItem(temp)) {
+		count++;
+		if (temp == item) {//일치하는 항목 발견
+			found = true;
+			for (int i = count;i<length-1;i++) {
+				info[i] = info[i + 1];
+			}
 			length--;
-			continue;
+			cout << "\tDeleted Item!\n";
 		}
-		if (temp == NULL)
-			break;
-	}
+	} 
+	if (found == false) { cout << "\tNo such item\n"; }
 }
 
 template<typename T>
@@ -114,13 +141,15 @@ void SortedList<T>::ResetList() {
 }
 
 template<typename T>
-void SortedList<T>::GetNextItem(T& item) {//current_pos를 하나 이동하고 그 아이템을 준다.
+bool SortedList<T>::GetNextItem(T& item) {//current_pos를 하나 이동하고 그 아이템을 준다.
 	if (current_pos + 1 <= length) {//
 		current_pos++;
 		item = info[current_pos];
+		return  true;
 	}
 	else {
 		item = NULL;
+		return false;
 	}
 }
 
