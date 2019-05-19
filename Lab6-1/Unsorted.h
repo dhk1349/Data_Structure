@@ -99,9 +99,7 @@ T UnsortedList<T>::Get(T item) {
 
 template<typename T>
 int UnsortedList<T>::Add(T item) {
-	cout << "진입\n";
 	Unsorted_Iterator<T> list(*this);
-	cout << "created iterator\n";
 	if (!list.NotNull()) { 
 		info[0] = item; 
 		length++; 
@@ -123,7 +121,6 @@ int UnsortedList<T>::Add(T item) {
 	}
 	while (list.NextNotNull()) {
 		list.Next();
-		cout << list.GetCurrentNode()->GetName() <<"비교"<< endl;
 		if (list.GetCurrentNode()->GetName() == item->GetName()) {
 			cout << "\t=====Same Item Already Exist!=====\n";
 			return 0;
