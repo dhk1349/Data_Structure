@@ -105,7 +105,7 @@ public:
 *	@param stirng in이 path변수의 내용이 된다.
 *	@return	없음
 */
-	virtual void Setaccess(string in){
+    virtual void Setaccess(string in){
 		access = in;
 	}
 	/**
