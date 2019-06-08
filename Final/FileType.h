@@ -9,8 +9,11 @@ using namespace std;
 
 class FileType : public AllType{	
 private:
+	string name ;
+	string path ;
 	string time ;
 	string access ;
+	string ext;
 public:
 	/**
 	*	default constructor.
@@ -61,7 +64,7 @@ public:
 *	@post	ofstream으로 저장된 해당 txt파일이름을 반환해준다.
 *	@return	access
 */
-	virtual string Getaccess() {
+	string Getaccess() {
 		return access;
 	}
 
@@ -105,7 +108,7 @@ public:
 *	@param stirng in이 path변수의 내용이 된다.
 *	@return	없음
 */
-	virtual void Setaccess(string in){
+	void Setaccess(string in) {
 		access = in;
 	}
 	/**
@@ -141,54 +144,56 @@ public:
 *	@return	없음
 */
 	void DisplayRecordOnScreen() {
-		cout << "\tName : "<<name<<endl;
-		cout << "\tPath : " << path<<ext<<endl;
-		cout << "\tEXT : "<<ext << endl;
-		cout << "\tTime : " << time << endl << endl;;
+		cout << "\t"<<name;
+		cout << ext << endl;
+	}
+	int OpenText(FileType* temp) {
+		ifstream indata;
+		indata.open(temp->Getaccess() + ".txt");
+		if (!indata.is_open()) {
+			//cout << temp->Getaccess() + ".txt";
+			cout << "\t파일이 안열렸어요,,\n";
+		}
+		string temp2;
+		while (indata.peek() != EOF) {
+			// std::getline은 입력 스트림에서 string으로 한 줄을 읽습니다.
+			getline(indata, temp2);
+			cout << "\t" << temp2 << endl;
+		}
+	return 1;
 	}
 
-
-
-
-
-	
 	/*
 @brief ==연산자 오버로딩
 *	@return	name변수가 같으면 true,아니면 false
 	*/
-	/*
-	bool operator==(AllType* temp) {
-		if (this->name == temp->GetName()) {
+	bool operator==(const FileType& temp) {
+		if (this->name == temp.name) {
 			return true;
 		}
 		return false;
 	}
-	*/
+
 	/*
 	@brief <연산자 오버로딩
 *	@retur오른쪽 name변수가 왼쪽 name변수 보다 크면 true,아니면 false
 	*/
-
-	/*
-	bool operator<(AllType* temp) {
-		if (this->name < temp->GetName()) {
+	bool operator<(const FileType& temp) {
+		if (this->name < temp.name) {
 			return true;
 		}
 		return false;
 	}
-	*/
 	/*
 	@brief >연산자 오버로딩
 *	@return	왼쪽 name변수가 오른쪽 name 변수보다 크면 true,아니면 false
 	*/
-	/*
-	bool operator>(AllType* temp) {
-		if (this->name > temp->GetName()) {
+	bool operator>(const FileType& temp) {
+		if (this->name > temp.name) {
 			return true;
 		}
 		return false;
 	}
-	*/
 };
 
 

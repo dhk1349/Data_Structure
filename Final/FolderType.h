@@ -8,13 +8,12 @@
 #include <fstream>
 #include <string>
 #include<sstream>
+#include <Windows.h>
 #include"FileType.h"
 #include "AllType.h"
-//#include"Unsorted.h"
-#include "Stack.h"
 #include"DoublyLinkedList.h"
 #include"DoublyIterator.h"
-#include"BST.h"
+#include"AVL.h"
 using namespace std;
 
 /*
@@ -36,10 +35,8 @@ public:
 		subfoldernum = 0;
 		filenum = 0;
 		size = 0;
-		ext = ".fol";
-		//fdFolderList = new DoublySortedLinkedList<FolderType>;
-		//fdFileList = new DoublySortedLinkedList<FileType>;
-		m_list = new  BinarySearchTree<AllType*>;
+		fdFolderList = new AVLTree<FolderType>;
+		fdFileList = new AVLTree<FileType>;
 	}
 	/**
 	*	destructor.
@@ -49,20 +46,20 @@ public:
 	/*
 	Copy Constructor
 	*/
-	/*
 	FolderType(const FolderType& input) {
 		//cout << "\t복사 생성자 사용\n";
 		name = input.name;
-		GenCreateTime();
+		times=GenCreateTime();
 		memory = input.memory;
 		subfoldernum = input.subfoldernum;
 		filenum = input.filenum;
 		size = input.size;
 		path = input.path;
-		fdFolderList = input.fdFolderList;
-		fdFileList = input.fdFileList;
+		//fdFolderList = input.fdFolderList;
+		//fdFileList = input.fdFileList;
+		SetFileList(input.fdFileList);
+		SetFolderList(input.fdFolderList);
 	}
-	*/
 	/**
 	*	@brief	ArrayList *list에 새로운 폴더를 추가
 	*	@pre	사용자로부터 폴더 이름을 받는다.
@@ -70,7 +67,7 @@ public:
 	*	@param	없음
 	*	@return 1을 반환한다.
 	*/
-	virtual int AddFolder();
+	int AddFolder();
 
 	/**
 	*	@brief	지정한 폴더를 삭제한다.
@@ -79,7 +76,7 @@ public:
 	*	@param	없음
 	*	@return 1을 반환한다.
 	*/
-	virtual int DeleteFolders();
+	int DeleteFolders();
 
 	/**
 *	@brief	지정한 폴더를 삭제한다.
@@ -88,7 +85,7 @@ public:
 *	@param	삭제할 폴더의 이름을 받는다.
 *	@return 1을 반환한다.
 */
-	virtual int DeleteFolders2(AllType* temp);
+	int DeleteFolders2(FolderType temp);
 	/**
 *	@brief	지정한 파일을 삭제한다.
 *	@pre	사용자로부터 삭제할 파일 이름을 받는다.
@@ -96,7 +93,7 @@ public:
 *	@param	없음
 *	@return 1을 반환한다.
 */
-	virtual int DeleteFiles();
+	int DeleteFiles();
 
 	/**
 	*	@brief	폴더를 폴더명으로 검색한다.
@@ -105,7 +102,7 @@ public:
 	*	@param	없음
 	*	@return 폴더를 1개 이상 발견하면 1을, 찾지 못했으면 0을 반환한다.
 	*/
-	virtual int RetrieveFoldersByName();
+	int RetrieveFoldersByName();
 
 	/**
 	*	@brief	모든 폴더를 보인다.
@@ -114,7 +111,7 @@ public:
 	*	@param	없음.
 	*	@return 없음.
 	*/
-	virtual void DisplayAll();
+	void DisplayAllFolderName();
 
 	/**
 	*	@brief	현재의 시간을 변수 time에 저장.
@@ -143,7 +140,8 @@ public:
 		ss << setw(4) << ti->tm_year + 1900 << setfill('0') << setw(2)
 			<< ti->tm_mon + 1 << setfill('0') << setw(2) << ti->tm_mday << setfill('0') << setw(2) << ti->tm_hour << setfill('0') << setw(2)
 			<< ti->tm_min << setfill('0') << setw(2) << ti->tm_sec << "\0";
-		return ss.str();  // copy the stream buffer to name 
+		string temp = ss.str();
+		return temp;
 	}
 
 	/**
@@ -255,7 +253,7 @@ public:
 	*/
 	void DisplayNameOnScreen() 
 	{
-		cout << "\tName  : " << name << endl; 
+		cout << "\tName   : " << name << endl; 
 	};
 
 	/**
@@ -263,9 +261,9 @@ public:
 	*	@pre	path가 설정되어있다.
 	*	@post	path가 화면에 출력된다.
 	*/
-	virtual void DisplayPathOnScreen() 
+	void DisplayPathOnScreen() 
 	{
-		cout << "\tPath : " << path<<ext << endl; 
+		cout << "\tPath : " << path << endl; 
 	};
 
 	/**
@@ -285,35 +283,22 @@ public:
 */
 	void DisplayTimeOnScreen()
 	{
-		cout << "\tTime : " << time << endl;
+		cout << "\tTime : " << times << endl;
 	};
 
-	/**
-*	@brief	Display student address on screen.
-*	@pre	student address is set.
-*	@post	student address is on screen.
-*/
-	//서브폴더를 보여주는 함수!! 추가 수정이 필요한 함수임.
-	void DisplayListOnScreen()
-	{
-		//아마도 ArrayList에서 구현한 함수를 가지고 오는 것이 좋을 듯 하다.
-		//cout << "\tTime : " << time << endl;
-	};
-
+	
 	/**
 	*	@brief	폴더 정보를 화면에 출력한다.
 	*	@pre	폴더 정보가 저장되어있다.
 	*	@post	폴더 정보가 화면에 출력된다.
 	*/
-	virtual void DisplayRecordOnScreen()
+	void DisplayRecordOnScreen()
 	{
 		DisplayNameOnScreen();
 		DisplayPathOnScreen();
-		//DisplayMemoryOnScreen();
-		cout << "\tEXT : " << ext << endl;
+		DisplayMemoryOnScreen();
 		DisplayTimeOnScreen();
 		cout << endl;
-		//	DisplayListOnScreen();
 	};
 
 	/**
@@ -357,7 +342,24 @@ public:
 *	@param	temp에 해당 서브폴더의 정보를 넣는다.
 *	@return	찾으려고 했던 폴더가 리턴되며, 찾지 못하면 NULL이 리턴된다.
 */
-	virtual AllType* SearchAllType(AllType *temp) ;
+	FolderType* SearchFolder(FolderType *temp);
+
+	/**
+*	@brief	하부파일을 검색
+*	@pre	없음
+*	@post	찾는 파일이 있다면 temp해 해당 파일이 복사된다.
+*	@param	temp에 검색할 파일 정보를 넣는다.
+*	@return	찾으려고 했던 파일이 리턴되며, 찾지 못하면 NULL이 리턴된다
+*/
+	FileType* SearchFile(FileType *temp);
+	/**
+*	@brief	하부폴더를 이진 검색으로 검색
+*	@pre	서브폴더가 초기화되어있다.
+*	@post	찾는 폴더가 있다면 temp해 해당 폴더가 복사된다.
+*	@param	temp에 해당 서브폴더의 정보를 넣는다.
+*	@return	해당 서브 폴더의 인덱스가 리턴되며, 해당 서브폴더가 없으면 -1을 리턴
+*/
+	int SearchFolderBinary(FolderType *temp);
 
 	/**
 *	@brief	텍스트 파일을 설정한다.
@@ -366,7 +368,7 @@ public:
 *	@param	없음
 *	@return 0을 반환한다.
 */
-	virtual int Addtextfile();
+	int Addtextfile();
 
 	/**
 *	@brief	지정한 텍스트 파일을 연다.
@@ -375,7 +377,15 @@ public:
 *	@param	없음
 *	@return 1을 반환한다.
 */
-	virtual int Opentext();
+	int Opentext();
+
+	/**
+*	@brief	해당 폴더 하부의 모든 파일들의 이름이 화면에 출력된다.
+*	@pre	없음
+*	@post	해당 폴더 하부의 모든 파일들의 이름이 화면에 출력된다.
+*	@return 없음
+*/
+	void DisplayAllFileName();
 
 
 	/**
@@ -384,7 +394,7 @@ public:
 *	@post	지정한 폴더의 이름이 변경된다.
 *	@return 0을 리턴
 */
-	virtual int ChangeSubfolderName();
+	int ChagneSubfolderName();
 
 	/**
 *	@brief	하부 파일의 이름을 변경한다.
@@ -392,7 +402,7 @@ public:
 *	@post	지정한 파일의 이름이 변경된다.
 *	@return 0을 리턴
 */
-	virtual int ChangeFileName();
+	int ChangeFileName();
 
 	/**
 *	@brief	하부 폴더에 indata로 입력 받은 폴더를 생성한다.
@@ -401,7 +411,7 @@ public:
 *  @params indata를 하부 폴더에 생성한다.
 *	@return 1을 리턴
 */
-	virtual int PasteFolder(AllType* indata);
+	int PaseteFolder(FolderType indata);
 
 	/**
 *	@brief	해당 폴더에 음악 추가
@@ -410,27 +420,59 @@ public:
 *  @params 없음.
 *	@return 추가되면 1을 리턴, 그렇지 않으면 0을 리턴
 */
-	virtual int IncludeMusic();
+	int IncludeMusic();
 
-	/*	@brief 해당 폴더의 서브리스트를 리턴하는 함수.
-*	@pre	없음
-*	@post  없음.
-*	@param 없음
-*	@return	m_list를 리턴.
-*/
-	virtual BinarySearchTree<AllType*> Getsublist() {
-		return *m_list;
+	/*
+	@brief ==연산자 오버로딩
+*	@return	name변수가 같으면 true,아니면 false
+	*/
+	bool operator==(const FolderType& temp) {
+		if (this->name == temp.name) {
+			return true;
+		}
+		return false;
+	}
+	
+/*
+	@brief <연산자 오버로딩
+*	@retur오른쪽 name변수가 왼쪽 name변수 보다 크면 true,아니면 false
+	*/
+	bool operator<(const FolderType& temp) {
+		if (this->name < temp.name) {
+			return true;
+		}
+		return false;
 	}
 
-	 void PushAllFolder(Stack<FolderType>* box) {
-		m_list->PushAllFolders(box);
+	/*
+	@brief >연산자 오버로딩
+*	@return	왼쪽 name변수가 오른쪽 name 변수보다 크면 true,아니면 false
+	*/
+	bool operator>(const FolderType& temp) {
+		if (this->name > temp.name) {
+			return true;
+		}
+		return false;
+	}
+	void SetFileList(AVLTree<FileType>*fdlist) {
+		fdFileList = NULL;
+		if (fdlist)
+			fdFileList = new AVLTree<FileType>(*fdlist);
+	}
+	void SetFolderList(AVLTree<FolderType>* fdlist) {
+		fdFolderList = NULL;
+		if (fdlist)
+			fdFolderList = new AVLTree<FolderType>(*fdlist);
 	}
 private:
+	string name;		
+	string path;	
 	int memory;
 	string times;
 	int subfoldernum;
 	int filenum;
-	BinarySearchTree<AllType*> *m_list;
+	AVLTree<FolderType> *fdFolderList;
+	AVLTree<FileType> *fdFileList;
 	int size;
 };
 

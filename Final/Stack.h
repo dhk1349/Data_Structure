@@ -8,7 +8,7 @@ using namespace std;
 template <typename T>
 class Stack {
 private:
-	T *list[100];
+	T *list[10];
 	int index1;
 	int index2;
 public:
@@ -32,7 +32,9 @@ public:
 */
 	int push(T* temp);
 
-	T* pop();
+T* pop();
+
+
 
 	/**
 *	@brief 스택의 크기를 정보를 제공 (길이-1)
@@ -98,11 +100,6 @@ public:
 *	@return	없음.
 */
 	void print();
-
-	void InitializeIndex() {
-		index1 = -1;
-		index2 = -1;
-	}
 };
 
 template<typename T>

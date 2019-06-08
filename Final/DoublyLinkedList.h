@@ -67,7 +67,7 @@ public:
 	*	@post	Item is inserted in this list.
 	*	@return	1 if this function works well, otherwise 0.
 	*/
-	int Add(T* item);
+	int Add(T item);
 
 	/**
 	*	@brief	Retrieve list element whose key matches item's key (if present).
@@ -157,10 +157,10 @@ int DoublySortedLinkedList<T>::GetLength()const {
 }
 
 template<typename T>
-int DoublySortedLinkedList<T>::Add(T* item) {
+int DoublySortedLinkedList<T>::Add(T item) {
 	DoublyIterator<T> iter(*this);
 	DoublyNodeType<T> *tempnode = new DoublyNodeType<T>;
-	tempnode->data = *item;
+	tempnode->data = item;
 
 	if (m_nLength == 0) {//처음 노드가 null인 경우.
 		//안되면
@@ -183,7 +183,7 @@ int DoublySortedLinkedList<T>::Add(T* item) {
 
 	while (m_nLength != 0) {//리스트 안에 next값이 존재한다.
 		iter.Next();//다음 노드로 이동
-		if (tempnode->data->GetName()<iter.m_pCurPointer->data->GetName()) {//다음 노드로 이동할 필요 없음
+		if (tempnode->data<iter.m_pCurPointer->data) {//다음 노드로 이동할 필요 없음
 			tempnode->prev = iter.m_pCurPointer->prev; //tempnode의 pre설정
 			iter.m_pCurPointer->prev->next = tempnode; //이전 노드의 next를 tempnode로 설정
 			tempnode->next = iter.m_pCurPointer;
@@ -191,16 +191,16 @@ int DoublySortedLinkedList<T>::Add(T* item) {
 			m_nLength++;
 			return 1;
 		}
-		else if (iter.m_pCurPointer->data->GetName() == tempnode->data->GetName()) {
-			//cout << iter.m_pCurPointer->data.GetName() << "과 " << tempnode->data.GetName() << "는 같다고 한다..\n";
-			bool result= iter.m_pCurPointer->data->GetName() == tempnode->data->GetName();
+		else if (iter.m_pCurPointer->data == tempnode->data) {
+			cout << iter.m_pCurPointer->data.GetName() << "과 " << tempnode->data.GetName() << "는 같다고 한다..\n";
+			bool result= iter.m_pCurPointer->data == tempnode->data;
 			cout << result << endl;
 			return 0;
 		}
 		else if (iter.m_pCurPointer->next == NULL) {//맨 마지막이 경우
 			tempnode->prev = iter.m_pCurPointer->prev;
 			iter.m_pCurPointer->prev->next = tempnode;
-			tempnode->next = iter.m_pCurPointer;//m_pLast와 같음. 
+			tempnode->next = iter.m_pCurPointer;//m_pLast와 같음.
 			iter.m_pCurPointer->prev = tempnode;
 			m_nLength++;
 			return 1;
@@ -226,9 +226,8 @@ T* DoublySortedLinkedList<T>::Get(T* item) {
 		cout << "\t========Item Found!========\n";
 		return item;
 	}
-	item = NULL;
 	cout << "\t========Item Not Found!========\n";
-	return item;
+	return NULL;
 }
 
 template<typename T>
@@ -271,13 +270,14 @@ int DoublySortedLinkedList<T>::Delete(T item) {
 template<typename T>
 void DoublySortedLinkedList<T>::print() {
 	DoublyIterator<T> iter(*this);
+	T temp;
 	while (iter.NextNotNull()) {//끝까지 돌아간다.
 		iter.Next();
 		if (iter.m_pCurPointer->next == nullptr) {
 			break;
 		}
-		iter.m_pCurPointer->data->DisplayRecordOnScreen();
-
+		temp = iter.m_pCurPointer->data;
+		temp.DisplayRecordOnScreen();
 	}
 }
 #endif//

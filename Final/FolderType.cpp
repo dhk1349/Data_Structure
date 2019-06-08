@@ -1,41 +1,42 @@
 #include "FolderType.h"
-using namespace std;
+
 
 int FolderType::AddFolder() {
 	//if (subfoldernum == 0) 
 		
-	AllType *data;
-	data = new FolderType;
-	data->SetNameFromKB();
-	data->Setpath(path+"\\"+data->GetName());
-
-	if (m_list->Add(data)==1) {
+	FolderType data;
+	data.SetNameFromKB();
+	data.Setpath(path+"\\"+data.name);
+	if (fdFolderList->Find(data)==false) {
+		fdFolderList->Add(data);
 		subfoldernum++;
 		memory++;
 		cout << endl;
-		DisplayAll();
+		DisplayAllFolderName();
+		DisplayAllFileName();
 	}
 	else {
 		cout << "\t같은 이름의 폴더가 존재합니다!\n";
 	}
 	return 1;
 }
-int FolderType::PasteFolder(AllType* indata) {
+int FolderType::PaseteFolder(FolderType indata) {
     //이부분을 어떻게 바꾸어야할지에 대해서 고민할 것.
-	AllType *temp = new FolderType;
-	temp=indata;
-	temp->Setpath(path + "\\" + temp->GetName());
+	FolderType temp = indata;
+	temp.Setpath(path + "\\" + temp.name);
 	while (true) {
-		if (m_list->Add(temp) == 1) {
+		if (fdFolderList->Find(temp)==false) {
+			fdFolderList->Add(temp);
 			subfoldernum++;
 			memory++;
-			DisplayAll();
+			DisplayAllFolderName();
+			DisplayAllFileName();
 			return 1;
 		}
 		else {
 			//똑같은 폴더가 존재한다면 이름 뒤에 무언가 추가해서 다시 추가한다.
-			temp->Setname(temp->GetName() + "_1");
-			temp->Setpath(path + "\\" + temp->GetName());
+			temp.Setname(temp.name + "_1");
+			temp.Setpath(path + "\\" + temp.name);
 		}
 	}
 }
@@ -45,12 +46,12 @@ int FolderType::Addtextfile() {
 	mock.Setpath(path+"\\"+mock.name);
 
 	//txt를 넣는 곳
-	AllType *data=new FileType;
-	data->Setname(mock.GetName());
-	data->Setpath(mock.GetPath());
-	data->Settime(mock.Gettime()) ;
-	data->Setext(".txt");
-	string textname=data->Getpath();
+	FileType data;
+	data.Setname(mock.GetName());
+	data.Setpath(mock.GetPath());
+	data.Settime(mock.Gettime()) ;
+	data.Setext(".txt");
+	string textname=data.Getpath();
 	for (int i = 0; i < textname.length(); i++) {
 		if (textname[i] == '\\') {
 			textname[i] = '+';
@@ -58,7 +59,7 @@ int FolderType::Addtextfile() {
 	}
 	ofstream outdata;
 	outdata.open(textname+".txt");
-	data->Setaccess(textname);
+	data.Setaccess(textname);
 	string test;
 	cout << "EXIT을 입력하면 종료\n";
 	while (true) {
@@ -67,24 +68,26 @@ int FolderType::Addtextfile() {
 		outdata << test << endl;
 	}
 	outdata.close();
-	if (m_list->Add(data) == 1){
+	if (fdFileList->Find(data)==false){
+		fdFileList->Add(data);
 		filenum++;
 		cout << "\t파일 추가 성공\n";
 	}
 	else { cout << "\t파일 추가 실패\n"; }
-	DisplayAll();
+	DisplayAllFolderName();
+	DisplayAllFileName();
 	return 0;
 }
 
 int FolderType::RetrieveFoldersByName() {
-	AllType *temp=new FolderType;
+	FolderType *temp=new FolderType;
 	string inData;
 	cout << "\tFolder Name: ";
 	cin >> inData;
 	temp->Setname(inData);
 	int result = 0;
-	temp = m_list->Get(temp);
-	if (temp->GetExt()!="NULL") {
+	temp = fdFolderList->Get(temp);
+	if (temp!=NULL) {
 		temp->DisplayRecordOnScreen();
 		result = 1;
 	}
@@ -111,64 +114,83 @@ int FolderType::RetrieveFoldersByName() {
 	return result;
 }
 
-void FolderType::DisplayAll()
+void FolderType::DisplayAllFolderName()
 {
-	if (subfoldernum == 0&&filenum==0) {
-		cout << "\t======Current List======\n";
+	if (subfoldernum == 0) {
+		cout << "\t======Current Folder List======\n";
 		//fdFolderList->print();
 		cout << "\t==============================\n\n";
 	}
 	else {
-		cout << "\t======Current List======\n";
-		m_list->print();
+		cout << "\t======Current Folder List======\n";
+		fdFolderList->print();
+		cout << "\t==============================\n\n";
+	}
+}
+void FolderType::DisplayAllFileName() {
+	if (filenum==0) {
+		cout << "\t======Current File List======\n";
+		//fdFileList->print();
+		cout << "\t==============================\n\n";
+	}
+	else {
+		cout << "\t======Current File List======\n";
+		fdFileList->print();
 		cout << "\t==============================\n\n";
 	}
 }
 
 int FolderType::DeleteFolders() {
-	AllType *temp=new FolderType;
-	DisplayAll();
-	temp->SetNameFromKB();
+	FolderType temp;
+	DisplayAllFolderName();
+	temp.SetNameFromKB();
 
-	int result = m_list->Delete(temp);
-	if (result == 0) {
+	bool result = fdFolderList->Find(temp);
+	if (result ==false) {
 		cout << "\t=====[ERROR]=====\n";
 		cout << "\t=There is no such file!!=\n";
-		DisplayAll();
+		DisplayAllFolderName();
+		DisplayAllFileName();
 	}
 	else {
+		fdFolderList->Delete(temp);
 		cout << "\tDeleted Successfully!\n";
 		subfoldernum--;
 		memory--;
-		DisplayAll();
+		DisplayAllFolderName();
+		DisplayAllFileName();
 	}
 	return result;
 }
 
-int FolderType::DeleteFolders2(AllType* temp) {
+int FolderType::DeleteFolders2(FolderType temp) {
 
-	int result = m_list->Delete(temp);
+	int result = fdFolderList->Delete(temp);
 	subfoldernum--;
 	memory--;
-	DisplayAll();
+	DisplayAllFolderName();
+	DisplayAllFileName();
 	return result;
 }
 
 int FolderType::DeleteFiles() {
-	AllType *temp=new FileType;
-	temp->SetNameFromKB();
+	FileType temp;
+	temp.SetNameFromKB();
 
-	int result = m_list->Delete(temp);
-	if (result == 0) {
+	bool result = fdFileList->Find(temp);
+	if (result == false) {
 		cout << "\t=====[ERROR]=====\n";
 		cout << "\t=There is no such file!!=\n";
-		DisplayAll();
+		DisplayAllFolderName();
+		DisplayAllFileName();
 	}
 	else {
+		fdFileList->Delete(temp);
 		cout << "\tDeleted Successfully!\n";
 		filenum--;
 		memory--;
-		DisplayAll();
+		DisplayAllFolderName();
+		DisplayAllFileName();
 	}
 	return result;
 }
@@ -211,13 +233,35 @@ int FolderType::WriteDataToFile(ofstream& fout)
 	return 1;
 }
 
-AllType* FolderType::SearchAllType(AllType *temp) {
+FolderType* FolderType::SearchFolder(FolderType *temp) {
 	temp->SetNameFromKB();
-	return  m_list->Get(temp);
+	return  fdFolderList->Get(temp);
+}
+
+FileType* FolderType::SearchFile(FileType *temp) {
+	temp->SetNameFromKB();
+	return  fdFileList->Get(temp);
+}
+
+int FolderType::SearchFolderBinary(FolderType *temp) {
+	/*
+	temp->SetNameFromKB();
+	int index=list.GetBinarySearch(*temp); //성공하면 1, 실패하면 0을 값으로 가질 것이다.
+	if (index == 1) {
+		cout << "\t======Found Folder======\n";
+		temp->DisplayRecordOnScreen();
+		cout << "\t=======================\n";
+	}
+	else {
+		cout << "\tNo such folder!\n";
+	}
+	return 1;
+	*/
+	return 1;
 }
 
 int FolderType::Opentext() {
-	DisplayAll();
+	DisplayAllFileName();
 	//FolderType data;
 	//data.SetNameFromKB();
 	/*
@@ -236,12 +280,12 @@ int FolderType::Opentext() {
 	//cout << "textname: "<< textname;//시험 중
 	temp->Setname(data.GetName());
 	*/
-	AllType *temp=new FileType;
+	FileType *temp=new FileType;
 	temp->SetNameFromKB();
-	if (m_list->Get(temp) != NULL) {//찾았을 때
+	if (fdFileList->Get(temp) != nullptr) {//찾았을 때
 		cout << "\tFound\n";
 		ifstream indata;
-		temp=m_list->Get(temp);
+		temp=fdFileList->Get(temp);
 		indata.open(temp->Getaccess() + ".txt");
 		if (!indata.is_open()) {
 			//cout << temp->Getaccess() + ".txt";
@@ -263,21 +307,35 @@ int FolderType::Opentext() {
 
 }
 
-int FolderType::ChangeSubfolderName() {
-	AllType *temp=new FolderType;
-	DisplayAll();
+int FolderType::ChagneSubfolderName() {
+	FolderType temp;
+	DisplayAllFolderName();
 	cout << "\t이름 바꿀 폴더 선택\n";
-	temp->SetNameFromKB();
-	m_list->Replace(temp);
+	temp.SetNameFromKB();
+	if (fdFolderList->Find(temp) == true){
+		FolderType* temp2;
+		temp2= fdFolderList->Get(&temp);
+		temp2->SetNameFromKB();	
+	}
+	else {
+		cout << "\tNo Such Folder\n";
+	}
 	return 0;
 }
 
 int FolderType::ChangeFileName() {
-	AllType *temp=new FileType;
-	DisplayAll();
-	cout << "\t바꿀 파일 선택\n";
-	temp->SetNameFromKB();
-	m_list->Replace(temp);
+	FileType temp;
+	DisplayAllFileName();
+	cout << "\t이름 바꿀 폴더 선택\n";
+	temp.SetNameFromKB();
+	if (fdFileList->Find(temp) == true) {
+		FileType* temp2;
+		temp2 = fdFileList->Get(&temp);
+		temp2->SetNameFromKB();
+	}
+	else {
+		cout << "\tNo Such File\n";
+	}
 	return 0;
 }
 
@@ -314,14 +372,15 @@ int FolderType::IncludeMusic() {
 		mock.Setpath(path + "\\" + mock.name);
 
 		//txt를 넣는 곳
-		AllType *data=new FileType;
-		data->Setname(mock.GetName());
-		data->Setpath(mock.GetPath());
-		data->Settime(mock.Gettime());
-		data->Setext("wav");
-		m_list->Add(data);
+		FileType data;
+		data.Setname(mock.GetName());
+		data.Setpath(mock.GetPath());
+		data.Settime(mock.Gettime());
+		data.Setext("wav");
+		fdFileList->Add(data);
 		filenum++;
-		DisplayAll();
+		DisplayAllFolderName();
+		DisplayAllFileName();
 		return 1;
 	}
 	else {

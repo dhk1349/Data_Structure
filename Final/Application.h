@@ -8,7 +8,6 @@
 #include "Queue.h"
 #include "FolderType.h"
 #include "Stack.h"
-//#include "Unsorted_Iter.h"
 #include <Windows.h>
 #include <MMsystem.h>
 #include <conio.h>
@@ -20,7 +19,6 @@ using namespace std;
 */
 class Application
 {
-	//friend class Unsorted_Iterator<UnsortedList<AllType*>*>;
 public:
 	/**
 	*	default constructor.
@@ -32,6 +30,8 @@ public:
 		m_curFolder = &m_RootFolder;
 		Addque(m_curFolder);
 		m_Command = 0;
+		FavFile = new AVLTree<FileType*>;
+		FavFol = new AVLTree<FolderType*>;
 	}
 	
 	/**
@@ -62,10 +62,28 @@ public:
 
 	/**
 *	@brief	Run함수 내부에서 검색 옵션을 작동시키는 함수
-*	@pre	RUN에서 검색 옵션을 들어온다.
-*	@post	검색 옵션 범주에 있는 명령 동작
+*	@pre	RUN에서 즐겨찾기 옵션을 들어온다.
+*	@post	폴더즐겨찾기 옵션으로 들어간다
 */
-	void SearchOption();
+	void FavoriteFolOption();
+	
+	void PrintFavFol();
+
+	void PrintFavFile();
+
+	void EnterFavFol();
+
+	void EnterFavFile();
+
+	void AddFavFol();
+	
+	void AddFavFile();
+	/**
+*	@brief	Run함수 내부에서 검색 옵션을 작동시키는 함수
+*	@pre	RUN에서 즐겨찾기 옵션을 들어온다.
+*	@post	파일즐겨찾기 옵션으로 들어간다
+*/
+	void FavoriteFileOption();
 
 	/**
 *	@brief	커맨드들을 모니터에 띄우고 커맨드를 사용자로부터 받는다
@@ -137,7 +155,7 @@ public:
 *	@post	열었던 폴더 기록이 m_RecentlyFolder에 저장된다.
 *	@return	1을 반환한다.
 */
-	int Addque(AllType* indata);
+	int Addque(FolderType* indata);
 
 	/**
 *	@brief m_RecentlyFolder에 기록을 추가한다.
@@ -242,18 +260,17 @@ public:
 */
 	int PlayMusic();
 
-	int GlobalSearch();
 private:
 	//ifstream m_InFile;		
 	//ofstream m_OutFile;		
 	int m_Command;			
-	AllType *m_curFolder;
-	AllType* copyspace;
+	FolderType *m_curFolder;
+	FolderType copyspace;
 	FolderType m_RootFolder;
-	Queue<AllType> m_RecentlyFolder;
-	Stack<AllType> UpperLower;
-	DoublySortedLinkedList<AllType> Freq;
-	Stack<FolderType> *SearchBox;
+	Queue<FolderType> m_RecentlyFolder;
+	Stack<FolderType> UpperLower;
+	AVLTree<FolderType*> *FavFol;
+	AVLTree<FileType*> *FavFile;
 };
 
 #endif	// _APPLICATION_H

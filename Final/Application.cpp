@@ -1,7 +1,5 @@
 #include "Application.h"
-//#include"Unsorted_Iter.h"
-template<typename T>
-class Unsorted_Iterator;
+
 
 // Program driver.
 void Application::Run2()
@@ -24,15 +22,18 @@ void Application::Run2()
 			FileOption();
 			break;
 		case 4:		
-			SearchOption();
+			FavoriteFolOption();
 			break;
 		case 5:
+			FavoriteFileOption();
+			break;
+		case 6:
 			RecentRecord();
 			break;
-		case 6:	
+		case 7:	
 			MoveBack();
 			break;
-		case 7:		
+		case 8:		
 			MoveForward();
 			break;
 		case 0:
@@ -92,7 +93,7 @@ void Application::FolderOption() {
 
 void Application::FileOption() {
 	int comm;
-	cout << "\t========File Command========\n";
+	cout << "\t========Folder Command========\n";
 	cout << "\t   1. 텍스트 파일 생성\n";
 	cout << "\t   2. 텍스트 파일 열기\n";
 	cout << "\t   3. 파일 이름 바꾸기\n";
@@ -128,18 +129,44 @@ void Application::FileOption() {
 	}
 }
 
-void Application::SearchOption() {
+void Application::FavoriteFolOption() {
 	int comm;
-	cout << "\t========Search Command========\n";
-	cout << "\t   1. 전역 검색\n";
-	cout << "\t   2. 나가기\n";
+	cout << "\t========Folder Command========\n";
+	cout << "\t   1. 즐겨찾는 폴더 보기\n";
+	cout << "\t   2. 들어가기\n";
+	cout << "\t   3. 나가기\n";
 	cout << endl << "\t Choose a Command--> ";
 	cin >> comm;
 	switch (comm) {
 	case 1:
-		GlobalSearch();
+		PrintFavFol();
 		break;
 	case 2:
+		EnterFavFol();
+		break;
+	case 3:
+		break;
+	default:
+		cout << "\tIllegal Selection \n";
+	}
+}
+
+void Application::FavoriteFileOption() {
+	int comm;
+	cout << "\t========Folder Command========\n";
+	cout << "\t   1. 즐겨찾는 파일 보기\n";
+	cout << "\t   2. 들어가기\n";
+	cout << "\t   3. 나가기\n";
+	cout << endl << "\t Choose a Command--> ";
+	cin >> comm;
+	switch (comm) {
+	case 1:
+		PrintFavFile();
+		break;
+	case 2:
+		EnterFavFile();
+		break;
+	case 3:
 		break;
 	default:
 		cout << "\tIllegal Selection \n";
@@ -147,8 +174,8 @@ void Application::SearchOption() {
 }
 
 int Application::DisplayAll() {
-	m_curFolder->DisplayAll();
-	//m_curFolder->DisplayAllFileName();
+	m_curFolder->DisplayAllFolderName();
+	m_curFolder->DisplayAllFileName();
 	return 1;
 }
 
@@ -160,10 +187,11 @@ int Application::GetCommand2() {
 	cout << "\t   1 : 하부 목록 보기" << endl;
 	cout << "\t   2 : 폴더 옵션" << endl;
 	cout << "\t   3 : 파일 옵션" << endl;
-	cout << "\t   4 : 검색 옵션" << endl;
-	cout << "\t   5 : 최근 기록" << endl;
-	cout << "\t   6 : 상위 폴더로 이동(앞으로 이동)" << endl;
-	cout << "\t   7 : 하위 폴더로 이동" << endl;
+	cout << "\t   4 : 폴더 즐겨찾기" << endl;
+	cout << "\t   5 : 파일 즐겨찾기" << endl;
+	cout << "\t   6 : 최근 기록" << endl;
+	cout << "\t   7 : 상위 폴더로 이동(앞으로 이동)" << endl;
+	cout << "\t   8 : 하위 폴더로 이동" << endl;
 	cout << "\t   0 : 종료" << endl;
 
 	cout << endl << "\t Choose a Command--> ";
@@ -177,7 +205,6 @@ int Application::NewFolder()
 {
 	int result = m_curFolder->AddFolder();
 	return result;
-
 }
 int Application:: RetrieveFolderByName() 
 {
@@ -208,7 +235,7 @@ int Application::OpenFolder() {
 	FolderType* temp;
 	temp = new FolderType;
 	//int index = m_curFolder->SearchFolder(temp);
-	m_curFolder = m_curFolder->SearchAllType(temp);
+	m_curFolder = m_curFolder->SearchFolder(temp);
 	if(m_curFolder!= NULL) {
 		//m_curFolder->Setname(temp->GetName());  이렇게 하면 원래의 상위폴더의 이름이 바뀌어버림..
 		//m_curFolder=m_curFolder->SearchGivenFolder(temp);
@@ -226,7 +253,7 @@ int Application::OpenFolder() {
 	}
 }
 
-int Application::Addque(AllType* indata) {
+int Application::Addque(FolderType* indata) {
 	m_RecentlyFolder.enque(indata);
 	UpperLower.push(indata);
 	return 1;
@@ -279,38 +306,39 @@ int Application::OpenText() {
 }
 
 int Application::ChangeFolderName() {
-	m_curFolder->ChangeSubfolderName();
-	m_curFolder->DisplayAll();
+	m_curFolder->ChagneSubfolderName();
+	m_curFolder->DisplayAllFolderName();
 	return 1;
 }
 int Application::ChangeFilename() {
 	m_curFolder->ChangeFileName();
-	m_curFolder->DisplayAll();
+	m_curFolder->DisplayAllFileName();
 	return 1;
 }
 
 
 void Application::CopyFolder() {
 	DisplayAll();
-	AllType* temp;
+	FolderType* temp;
 	temp = new FolderType;
-	AllType* copy(m_curFolder->SearchAllType(temp));
+	FolderType copy(*m_curFolder->SearchFolder(temp));
 	copyspace = copy;
 	//지정한 폴더를 temp에다가 복사해두었다.
 }
 
 void Application::CutFolder() {
 	DisplayAll();
-	AllType* temp;
+	FolderType* temp;
 	temp = new FolderType;
-	copyspace =m_curFolder->SearchAllType(temp);
-
-	m_curFolder->DeleteFolders2(temp);
+	copyspace = *m_curFolder->SearchFolder(temp);
+	FolderType temp2;
+	temp2 = *temp;
+	m_curFolder->DeleteFolders2(temp2);
 }
 
 void Application::PasteFolder() {
-	if (copyspace->GetName()!="") {
-		m_curFolder->PasteFolder(copyspace);
+	if (copyspace.GetName()!="") {
+		m_curFolder->PaseteFolder(copyspace);
 	}
 	else {
 		cout << "\t복사된 내용이 없습니다!!\n";
@@ -322,11 +350,11 @@ void Application::ImportMusic() {
 }
 
 int Application::PlayMusic() {
-	m_curFolder->DisplayAll();
+	m_curFolder->DisplayAllFileName();
 	cout << "\t재생할 음악을 선택하세요(음악이 아니면 재생되지 않음)\n ";
-	AllType* temp;
+	FileType* temp;
 	temp = new FileType;
-	temp = m_curFolder->SearchAllType(temp);
+	temp = m_curFolder->SearchFile(temp);
 	if (temp!=NULL) {
 		if (temp->GetExt()=="wav") {
 			//음악재생
@@ -355,17 +383,31 @@ int Application::PlayMusic() {
 	else { cout << "\t해당 파일을 찾을 수 없습니다.\n"; return 1; }
 }
 
-int Application::GlobalSearch() {
-	cout << "\tGlobal Search\n";
-	AllType *item=new FolderType;
-	item->SetNameFromKB();
-	SearchBox->push(&m_RootFolder);//시작할 때  루트 폴더의 주소 값을 넣는다.
-	FolderType *temp;
-	do {
-		temp = SearchBox->pop();
-		temp->SearchAllType(item);
-		temp->PushAllFolder(SearchBox);
-	} 
-	while (SearchBox->Getindex()!=-1);
-	SearchBox->InitializeIndex();
+void Application::AddFavFol() {}
+void Application::AddFavFile() {}
+
+void Application::PrintFavFile() {
+	cout << "\t=====즐겨찾는 파일=====\n"; 
+	//FavFile->pointprint();
+	cout << "\t=======================\n";
 }
+
+void Application::PrintFavFol() {
+	cout << "\t=====즐겨찾는 폴더=====\n";
+	//FavFol->pointprint();
+	cout << "\t=======================\n";
+}
+
+void Application::EnterFavFile() {
+	FileType* temp = new FileType;
+	temp->SetNameFromKB();
+	if (FavFile->GetByPoint(temp) != nullptr) {
+		temp->OpenText(temp);
+	}
+	else
+	{
+		cout << "\tNo such File\n";
+	}
+}
+
+void Application::EnterFavFol() {}
