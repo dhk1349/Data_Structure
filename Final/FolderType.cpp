@@ -238,8 +238,16 @@ FolderType* FolderType::SearchFolder(FolderType *temp) {
 	return  fdFolderList->Get(temp);
 }
 
+FolderType* FolderType::SearchFolderWithInput(FolderType *temp) {
+	return  fdFolderList->Get(temp);
+}
+
 FileType* FolderType::SearchFile(FileType *temp) {
 	temp->SetNameFromKB();
+	return  fdFileList->Get(temp);
+}
+
+FileType* FolderType::SearchFileWithInput(FileType *temp) {
 	return  fdFileList->Get(temp);
 }
 
@@ -376,7 +384,7 @@ int FolderType::IncludeMusic() {
 		data.Setname(mock.GetName());
 		data.Setpath(mock.GetPath());
 		data.Settime(mock.Gettime());
-		data.Setext("wav");
+		data.Setext(".wav");
 		fdFileList->Add(data);
 		filenum++;
 		DisplayAllFolderName();

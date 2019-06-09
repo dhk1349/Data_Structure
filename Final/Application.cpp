@@ -36,6 +36,9 @@ void Application::Run2()
 		case 8:		
 			MoveForward();
 			break;
+		case 9:
+			EnterWithAddress();
+			break;
 		case 0:
 			return;
 		default:
@@ -56,7 +59,8 @@ void Application::FolderOption() {
 	cout << "\t   6. 폴더 잘라내기\n";
 	cout << "\t   7. 폴더 붙여넣기\n";
 	cout << "\t   8. 폴더 이름 바꾸기\n";
-	cout << "\t   9. 나가기\n";
+	cout << "\t   9. 즐겨찾기 폴더 추가\n";
+	cout << "\t   10. 나가기\n";
 	cout << endl << "\t Choose a Command--> ";
 	cin >> comm;
 	switch (comm) {
@@ -85,6 +89,8 @@ void Application::FolderOption() {
 			ChangeFolderName();
 			break;
 		case 9:
+			AddFavFol();
+		case 10:
 			break;
 		default:
 			cout << "\tIllegal Selection \n";
@@ -100,7 +106,8 @@ void Application::FileOption() {
 	cout << "\t   4. 파일 삭제\n";
 	cout << "\t   5. 음악 저장하기\n";
 	cout << "\t   6. 음악 재생하기\n";
-	cout << "\t   7. 나가기\n";
+	cout << "\t   7. 즐겨찾기 파일 추가 \n";
+	cout << "\t   8. 나가기\n";
 	cout << endl << "\t Choose a Command--> ";
 	cin >> comm;
 	switch (comm) {
@@ -122,7 +129,9 @@ void Application::FileOption() {
 	case 6:
 		PlayMusic();
 		break;
-	case 7:
+	case  7:
+		AddFavFile();
+	case 8:
 		break;
 	default:
 		cout << "\tIllegal Selection \n";
@@ -192,6 +201,7 @@ int Application::GetCommand2() {
 	cout << "\t   6 : 최근 기록" << endl;
 	cout << "\t   7 : 상위 폴더로 이동(앞으로 이동)" << endl;
 	cout << "\t   8 : 하위 폴더로 이동" << endl;
+	cout << "\t   9 : 주소로 이동" << endl;
 	cout << "\t   0 : 종료" << endl;
 
 	cout << endl << "\t Choose a Command--> ";
@@ -356,7 +366,7 @@ int Application::PlayMusic() {
 	temp = new FileType;
 	temp = m_curFolder->SearchFile(temp);
 	if (temp!=NULL) {
-		if (temp->GetExt()=="wav") {
+		if (temp->GetExt()==".wav") {
 			//음악재생
 			cout << "\t아무 키나 누르면 재생이 종료됩니다.\n";
 
@@ -383,26 +393,48 @@ int Application::PlayMusic() {
 	else { cout << "\t해당 파일을 찾을 수 없습니다.\n"; return 1; }
 }
 
-void Application::AddFavFol() {}
-void Application::AddFavFile() {}
+void Application::AddFavFol() {
+	FolderType* temp=new FolderType;
+	//temp->SetNameFromKB();
+	temp = m_curFolder->SearchFolder(temp);
+	if (temp!=nullptr) {
+		FavFol->Add(temp);
+		PrintFavFol();
+	}
+	else { cout << "\tNo Such Folder!\n"; }
+}
+void Application::AddFavFile() {
+	FileType* temp=new FileType;
+	//temp->SetNameFromKB();
+	temp = m_curFolder->SearchFile(temp);
+	if (temp != nullptr) {
+		FavFile->Add(temp);
+		PrintFavFile();
+	}
+	else { cout << "\tNo Such File!\n"; }
+}
 
 void Application::PrintFavFile() {
 	cout << "\t=====즐겨찾는 파일=====\n"; 
-	//FavFile->pointprint();
+	FavFile->print();
 	cout << "\t=======================\n";
 }
 
 void Application::PrintFavFol() {
 	cout << "\t=====즐겨찾는 폴더=====\n";
-	//FavFol->pointprint();
+	FavFol->print();
 	cout << "\t=======================\n";
 }
 
 void Application::EnterFavFile() {
+	PrintFavFile();
 	FileType* temp = new FileType;
 	temp->SetNameFromKB();
-	if (FavFile->GetByPoint(temp) != nullptr) {
-		temp->OpenText(temp);
+	if (FavFile->Find(temp) ==true) {
+		temp = FavFile->Get(temp);
+		string address = temp->Getpath();
+		address+=temp->GetExt();
+		EnterAddressWithInput(address);
 	}
 	else
 	{
@@ -410,4 +442,19 @@ void Application::EnterFavFile() {
 	}
 }
 
-void Application::EnterFavFol() {}
+void Application::EnterFavFol() {
+	PrintFavFol();
+	FolderType* temp=new FolderType;
+	temp->SetNameFromKB();
+	if (FavFol->Find(temp) == true) {
+		//이렇게 만들게 아니라 되돌아가려면 주소 검색 함수를 가져다 써야함.
+		temp = FavFol->Get(temp);
+		string address = temp->Getpath();
+		address+=temp->GetExt();
+		EnterAddressWithInput(address);
+	}
+	else
+	{
+		cout << "\tNo such Folder\n";
+	}
+}

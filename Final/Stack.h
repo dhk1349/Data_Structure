@@ -32,7 +32,7 @@ public:
 */
 	int push(T* temp);
 
-T* pop();
+	T* pop();
 
 
 
@@ -100,6 +100,8 @@ T* pop();
 *	@return	¾øÀ½.
 */
 	void print();
+
+	void Reset();
 };
 
 template<typename T>
@@ -172,6 +174,11 @@ T* Stack<T>::Get(int in) {
 	return list[in];
 }
 
+template<typename T>
+void Stack<T>::Reset() {
+	index1 = 0;
+	index2 = -1;
+}
 
 template<typename T>
 void Stack<T>::print() {

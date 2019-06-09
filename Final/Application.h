@@ -7,7 +7,11 @@
 #include <string>
 #include "Queue.h"
 #include "FolderType.h"
+#include  "FileType.h"
 #include "Stack.h"
+#include "AVL2.h"
+#include "BaseHeap.h"
+#include "MinHeap.h"
 #include <Windows.h>
 #include <MMsystem.h>
 #include <conio.h>
@@ -30,8 +34,8 @@ public:
 		m_curFolder = &m_RootFolder;
 		Addque(m_curFolder);
 		m_Command = 0;
-		FavFile = new AVLTree<FileType*>;
-		FavFol = new AVLTree<FolderType*>;
+		FavFile = new AVLTree2<FileType*>;
+		FavFol = new AVLTree2<FolderType*>;
 	}
 	
 	/**
@@ -78,6 +82,7 @@ public:
 	void AddFavFol();
 	
 	void AddFavFile();
+
 	/**
 *	@brief	Run함수 내부에서 검색 옵션을 작동시키는 함수
 *	@pre	RUN에서 즐겨찾기 옵션을 들어온다.
@@ -260,6 +265,152 @@ public:
 */
 	int PlayMusic();
 
+	//input은 이미 존재한다는것이 가정
+	int  PlayMusicWithInput(FileType*  temp) {
+		if (temp != nullptr) {
+			if (temp->GetExt() == ".wav") {
+				//음악재생
+				cout << "\t아무 키나 누르면 재생이 종료됩니다.\n";
+				string inname = temp->GetName() + ".wav";
+
+				char buffer[MAX_PATH];
+				GetModuleFileNameA(NULL, buffer, MAX_PATH);
+				string::size_type pos = string(buffer).find_last_of("\\/");
+				inname = string(buffer).substr(0, pos) + "\\" + inname;
+				LPCSTR song = inname.c_str();
+
+				PlaySound(song, NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+				while (!_kbhit());
+				PlaySound(NULL, 0, 0);
+				return 1;
+			}
+			else {
+				cout << "해당 파일의 형식은: " << temp->GetExt() << "\n";
+				cout << "\t형식이 일치하지 않습니다.\n";
+				return 1;
+			}
+		}
+		else { cout << "\t해당 파일을 찾을 수 없습니다.\n"; return 1; }
+	}
+
+	void EnterWithAddress() {
+		string address;
+		cout << "\t주소: ";
+		cin >> address;
+		EnterAddressWithInput(address);
+	}
+	void EnterAddressWithInput(string address) {
+		CMinHeap<int> AddressIndex(100);
+		int counter = 0;
+		int validcounter = 0;//실제로 몇 번의 디렉토리를 거쳐야 하는지, 맨 앞은 루트여서 0으로 시작
+		//AddressIndex->Add(-2);
+		for (string::iterator it = address.begin(); it != address.end(); it++) {//해당 이터레이션을 마치면 주소 중 매 디렉토리의 시작 인텍스가 나온다.
+			//AddressIndex에는 0,\전 인덱스들, 맨마지막 인덱스가 차례로 들어간다.
+			if (*it == '\\') {
+				//cout << "Adding " << counter + 1 << endl;
+				AddressIndex.Add(counter + 1);
+				validcounter += 1;
+			}
+			if (it == address.end() - 1) {
+				//cout << "Adding " << counter + 2 << endl;
+				AddressIndex.Add(counter+2);
+			}
+			counter += 1;
+		}
+		//openfolder할 때 실패 하면 0, 성공하면 1을 리턴한다.
+		FolderType* temp = new FolderType;
+		temp = &m_RootFolder;
+		FolderType *temp2 = new FolderType;
+		bool validaddress = false;
+		int index1;
+		int index2 = AddressIndex.Dequeue()-2;
+		for (int i = 0;i<validcounter;i++) {
+			index1 = index2+2;
+			index2 = AddressIndex.Dequeue()-2;
+			//cout << "Entering  " << address.substr(index1, index2 - index1 + 1) << endl;
+			if (i != validcounter-1 ) {//계속 폴더로 들어가야함
+				temp2->Setname(address.substr(index1,index2-index1+1));
+				temp=temp->SearchFolderWithInput(temp2);
+				if (temp == nullptr) {break;}
+				//else {cout << "Entered!\n";}
+			}
+			else {//마지막에 들어가기
+				string filename = address.substr(index1,index2-index1+1-4);
+				//cout << "Filename: " << filename << endl;
+				string ext = address.substr(address.length()-4);
+				//cout << "EXT: " << ext << endl;
+				if (ext == ".fol") {
+					temp2->Setname(filename);
+					temp = temp->SearchFolderWithInput(temp2);
+					if (temp != nullptr) { validaddress = true; }
+				}
+				else {//파일 타입인경우
+					FileType * temp3 = new FileType;
+					temp3->Setname(filename);
+					temp3 = temp->SearchFileWithInput(temp3);
+					if (temp3 != nullptr) { validaddress = true; }
+				}
+			}
+		}
+		if (validaddress == false) {
+			cout << "\tInvalid Address!\n";
+		}
+		else { cout << "\tValid Address!\n"; 
+				//이제진짜 폴더로 들어가야함
+			CMinHeap<int> R_AddressIndex(100);
+			 counter = 0;
+			 validcounter = 0;//실제로 몇 번의 디렉토리를 거쳐야 하는지, 맨 앞은 루트여서 0으로 시작
+			for (string::iterator it = address.begin(); it != address.end(); it++) {//해당 이터레이션을 마치면 주소 중 매 디렉토리의 시작 인텍스가 나온다.
+				if (*it == '\\') {
+					R_AddressIndex.Add(counter + 1);
+					validcounter += 1;
+				}
+				if (it == address.end() - 1) {
+					R_AddressIndex.Add(counter + 2);
+				}
+				counter += 1;
+			}
+			m_curFolder = &m_RootFolder;
+			UpperLower.Reset();
+			int index1;
+			int index2 = R_AddressIndex.Dequeue() - 2;
+			for (int i = 0; i < validcounter; i++) {
+				index1 = index2 + 2;
+				index2 = R_AddressIndex.Dequeue() - 2;
+				if (i != validcounter - 1) {//계속 폴더로 들어가야함
+					temp2->Setname(address.substr(index1, index2 - index1 + 1));
+					m_curFolder = m_curFolder->SearchFolderWithInput(temp2);
+					Addque(m_curFolder);
+					UpperLower.EqualizeIndex();
+				}
+				else {//마지막에 들어가기
+					string filename = address.substr(index1, index2 - index1 + 1 - 4);
+					string ext = address.substr(address.length() - 4);
+					if (ext == ".fol") {
+						temp2->Setname(filename);
+						m_curFolder = m_curFolder->SearchFolderWithInput(temp2);
+						Addque(m_curFolder);
+						UpperLower.EqualizeIndex();
+					}
+					else {//파일 타입인경우
+						FileType * temp3 = new FileType;
+						temp3->Setname(filename);
+						temp3 = m_curFolder->SearchFileWithInput(temp3);
+						if (ext == ".txt") { 
+							cout << "\t=====내용=====\n";
+							temp3->OpenText(temp3); 
+							cout << "==================\n";
+						}
+						else if (ext == ".wav") { PlayMusicWithInput(temp3); }
+						else { cout << "\t지원하지 않는 형식입니다.\n"; }
+					}
+				}
+			}
+
+		}
+
+	}
+
 private:
 	//ifstream m_InFile;		
 	//ofstream m_OutFile;		
@@ -269,8 +420,8 @@ private:
 	FolderType m_RootFolder;
 	Queue<FolderType> m_RecentlyFolder;
 	Stack<FolderType> UpperLower;
-	AVLTree<FolderType*> *FavFol;
-	AVLTree<FileType*> *FavFile;
+	AVLTree2<FolderType*> *FavFol;
+	AVLTree2<FileType*> *FavFile;
 };
 
 #endif	// _APPLICATION_H

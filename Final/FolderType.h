@@ -344,6 +344,8 @@ public:
 */
 	FolderType* SearchFolder(FolderType *temp);
 
+	FolderType* SearchFolderWithInput(FolderType *temp);
+
 	/**
 *	@brief	하부파일을 검색
 *	@pre	없음
@@ -352,6 +354,8 @@ public:
 *	@return	찾으려고 했던 파일이 리턴되며, 찾지 못하면 NULL이 리턴된다
 */
 	FileType* SearchFile(FileType *temp);
+
+	FileType* SearchFileWithInput(FileType *temp);
 	/**
 *	@brief	하부폴더를 이진 검색으로 검색
 *	@pre	서브폴더가 초기화되어있다.
@@ -421,6 +425,7 @@ public:
 *	@return 추가되면 1을 리턴, 그렇지 않으면 0을 리턴
 */
 	int IncludeMusic();
+
 
 	/*
 	@brief ==연산자 오버로딩

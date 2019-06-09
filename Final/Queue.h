@@ -8,7 +8,7 @@ using namespace std;
 template <typename T>
 class Queue {
 private:
-	T *list[10];
+	T *list[100];
 	int index;
 public:
 
@@ -70,6 +70,16 @@ public:
 *	@return	없음.
 */
 	void print();
+
+	/**
+*	@brief 큐를 초기화
+*	@pre	없음
+*	@post	큐의 인덱스가 -1이됨
+*	@return	없음.
+*/
+	void Reset() {
+		index = -1;
+	}
 };
 
 template<typename T>
