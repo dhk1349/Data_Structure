@@ -101,6 +101,12 @@ public:
 */
 	void print();
 
+	/**
+*	@brief 스택을 초기화
+*	@pre	없음
+*	@post	스택이 초기화된다.
+*	@return	없음.
+*/
 	void Reset();
 };
 

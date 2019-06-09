@@ -71,20 +71,56 @@ public:
 */
 	void FavoriteFolOption();
 	
+	/**
+*	@brief	즐겨찾는 폴더  리스트를 화면에 출력
+*	@pre	없음
+*	@post	화면에 즐겨찾는 폴더리스트가 출력된다.
+*	@return 없음
+*/
 	void PrintFavFol();
 
+	/**
+*	@brief	즐겨찾는 파일  리스트를 화면에 출력
+*	@pre	없음
+*	@post	화면에 즐겨찾는 파일리스트가 출력된다.
+*	@return 없음
+*/
 	void PrintFavFile();
 
+	/**
+*	@brief	즐겨찾는 폴더 에 직접 들어가는 함수
+*	@pre	없음
+*	@post	즐겨찾는 폴더로 이동된다.
+*	@return 없음
+*/
 	void EnterFavFol();
 
+	/**
+*	@brief	즐겨찾는 파일에 직접 들어가는 함수
+*	@pre	없음
+*	@post	즐겨찾는 파일로 이동된다.
+*	@return 없음
+*/
 	void EnterFavFile();
 
+	/**
+*	@brief	즐겨찾는 폴더리스트에 특정 폴더를 추가하는 함수
+*	@pre	없음
+*	@post	즐겨찾는 폴더리스트에 폴더가 추가된다.
+*	@return 없음
+*/
 	void AddFavFol();
 	
+	/**
+*	@brief	즐겨찾는 파일리스트에 특정 폴더를 추가하는 함수
+*	@pre	없음
+*	@post	즐겨찾는 파일리스트에 폴더가 추가된다.
+*	@return 없음
+*/
 	void AddFavFile();
 
 	/**
-*	@brief	Run함수 내부에서 검색 옵션을 작동시키는 함수
+*	@brief	Run함수 내부에서 즐겨찾는 파일 옵션을 작동시키는 함수
 *	@pre	RUN에서 즐겨찾기 옵션을 들어온다.
 *	@post	파일즐겨찾기 옵션으로 들어간다
 */
@@ -265,6 +301,13 @@ public:
 */
 	int PlayMusic();
 
+	/**
+*	@brief 해당 폴더 내부에 있는 음악을 재생한다.
+*	@pre 재생할 음악이 폴더 내부에 존재한다.
+*	@post	현재 폴더에 지정한 음악이 재생된다.
+*	@param 열고자하는 파일의 이름과 확장자가 담긴 파일 타입 변수
+*	@return 성공적으로 재생되면 1을, 아니면 0을 리턴
+*/
 	//input은 이미 존재한다는것이 가정
 	int  PlayMusicWithInput(FileType*  temp) {
 		if (temp != nullptr) {
@@ -293,12 +336,27 @@ public:
 		else { cout << "\t해당 파일을 찾을 수 없습니다.\n"; return 1; }
 	}
 
+	/**
+*	@brief 주소값을 입력받아서 해당 주소로 이동하는 함수
+*	@pre 없음
+*	@post	입력한 주소값이 유효하다면, 해당 주소번지로 이동된다.
+*	@param 없음
+*	@return 없음
+*/
 	void EnterWithAddress() {
 		string address;
 		cout << "\t주소: ";
 		cin >> address;
 		EnterAddressWithInput(address);
 	}
+
+	/**
+*	@brief 해당 주소번지로 curfolder가 이동하는 함수
+*	@pre 없음
+*	@post	유효한 주소라면 해당 주소 번지로 이동하며, 유효하지 않으면 아무 동작도 일어나지 않음
+*	@param 이동하고자 하는 위치의 path
+*	@return 없음
+*/
 	void EnterAddressWithInput(string address) {
 		CMinHeap<int> AddressIndex(100);
 		int counter = 0;

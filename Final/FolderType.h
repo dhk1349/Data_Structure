@@ -55,8 +55,6 @@ public:
 		filenum = input.filenum;
 		size = input.size;
 		path = input.path;
-		//fdFolderList = input.fdFolderList;
-		//fdFileList = input.fdFileList;
 		SetFileList(input.fdFileList);
 		SetFolderList(input.fdFolderList);
 	}
@@ -355,6 +353,13 @@ public:
 */
 	FileType* SearchFile(FileType *temp);
 
+	/**
+*	@brief	하부파일을 검색
+*	@pre	없음
+*	@post	찾는 파일이 있다면 temp해 해당 파일이 복사된다.
+*	@param	찾고자 하는 파일의 이름이 담긴 파일타입 변수
+*	@return	찾으려고 했던 파일이 리턴되며, 찾지 못하면 NULL이 리턴된다
+*/
 	FileType* SearchFileWithInput(FileType *temp);
 	/**
 *	@brief	하부폴더를 이진 검색으로 검색
@@ -459,11 +464,27 @@ public:
 		}
 		return false;
 	}
+
+	/**
+*	@brief	입력받은 리스트를 현재 리스트에 복사
+*	@pre	없음
+*	@post	입력받은 리스트를 현재 리스트에 복사
+*	@param	복사하고자 하는 파일리스트
+*	@return	없음
+*/
 	void SetFileList(AVLTree<FileType>*fdlist) {
 		fdFileList = NULL;
 		if (fdlist)
 			fdFileList = new AVLTree<FileType>(*fdlist);
 	}
+
+	/**
+*	@brief	입력받은 리스트를 현재 리스트에 복사
+*	@pre	없음
+*	@post	입력받은 리스트를 현재 리스트에 복사
+*	@param	복사하고자 하는 폴더리스트
+*	@return	없음
+*/
 	void SetFolderList(AVLTree<FolderType>* fdlist) {
 		fdFolderList = NULL;
 		if (fdlist)

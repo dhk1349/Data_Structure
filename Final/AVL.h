@@ -28,31 +28,59 @@ public:
 	*/
 	~AVLTree();
 	/**
-	*	현재 노드의 길이(갯수를 반환)
+	*	@bried 현재 노드의 길이(갯수를 반환)
+	*	@pre 없음
+	*	@post 없음
+	*	@param 없음
+	*	@return 현재 노드의 길이(갯수를 반환)
 	*/
 	int GetLength();
 	/**
-	*	비어있는지 확인
+	*	@brief 비어있는지 확인
+	*	@pre 없음
+	*	@post 없음
+	*	@param 없음
+	*	@return 비어있으면 true아니면 false
 	*/
 	bool IsEmpty();
 	/**
-	*	전체 트리삭제
+	*	@brief 전체 트리삭제
+	*	@pre 없음
+	*	@post 전체 트리삭제
+	*	@param 없음
+	*	@return 없음
 	*/
 	void MakeEmpty(TreeNode<T>*& Node);
 	/**
-	*	파라미터로 받은 데이터를 트리에 추가
+	*	@brief 파라미터로 받은 데이터를 트리에 추가
+	*	@pre 없음
+	*	@post 파라미터로 받은 데이터를 트리에 추가
+	*	@param 추가하고자 하는 데이터
+	*	@return 성공하면 1
 	*/
 	int Add(T data);
 	/**
-	*	파라미터로 받은 데이터를 트리에서 삭제
+	*	@brief 파라미터로 받은 데이터를 트리에서 삭제
+	*	@pre 없음
+	*	@post 파라미터로 받은 데이터를 트리에서 삭제
+	*	@param 삭제하고자 하는 데이터
+	*	@return 성공하면 1
 	*/
 	int Delete(T data);
 	/**
-	*	데이터를 파라미터로 받아 일치하는 데이터가 있는지 확인 후 데이터를 복사해줌
+	*	@brief 데이터를 파라미터로 받아 일치하는 데이터가 있는지 확인 후 데이터를 복사해줌
+	*	@pre 없음
+	*	@post 찾으면 파라미터에 정보 복사
+	*	@param 찾고자하는 데이터
+	*	@return 성공하면 true
 	*/
 	bool Find(T data);
 	/**
-	*	데이터를 파라미터로 받아 일치하는 데이터가 있는지  장르 이름 비교를 통해 확인 후 데이터의 주소값을 리턴해줌
+	*	@brief 데이터를 파라미터로 받아 일치하는 데이터가 있는지  장르 이름 비교를 통해 확인 후 데이터의 주소값을 리턴해줌
+	*	@pre 없음
+	*	@post 없음
+	*	@param 추가하고자 하는 데이터의 포인터
+	*	@return 성공하면 찾고자하는 데이터의 포인터가 리턴
 	*/
 	T* Get(T* data);
 

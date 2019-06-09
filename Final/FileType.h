@@ -147,6 +147,14 @@ public:
 		cout << "\t"<<name;
 		cout << ext << endl;
 	}
+
+	/**
+*	@brief 텍스트  형식의 파일을 연다
+*	@pre	없음
+*	@post	텍스트 파일의 내용이 화면에 출력
+*	@param 찾고자 하는 파일의 주소와 이름이 담긴 파일타입 변수
+*	@return	1
+*/
 	int OpenText(FileType* temp) {
 		ifstream indata;
 		indata.open(temp->Getaccess() + ".txt");
