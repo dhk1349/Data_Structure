@@ -11,8 +11,8 @@
 #include"FileType.h"
 #include "AllType.h"
 #include"Unsorted.h"
-#include"DoublyLinkedList.h"
-#include"DoublyIterator.h"
+//#include"DoublyLinkedList.h"
+//#include"DoublyIterator.h"
 using namespace std;
 
 /*

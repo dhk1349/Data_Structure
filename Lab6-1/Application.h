@@ -9,6 +9,7 @@
 #include "FolderType.h"
 #include "Stack.h"
 #include "Unsorted_Iter.h"
+#include "BST.h"
 #include <Windows.h>
 #include <MMsystem.h>
 #include <conio.h>
@@ -251,7 +252,7 @@ private:
 	FolderType m_RootFolder;
 	Queue<AllType> m_RecentlyFolder;
 	Stack<AllType> UpperLower;
-	DoublySortedLinkedList<AllType> Freq;
+	BinarySearchTree<AllType> Freq;
 };
 
 #endif	// _APPLICATION_H

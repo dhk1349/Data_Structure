@@ -32,7 +32,7 @@ public:
 */
 	int push(T* temp);
 
-T* pop();
+	T* pop();
 
 
 
