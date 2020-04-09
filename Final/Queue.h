@@ -22,7 +22,7 @@ public:
 	*/
 	~Queue() {}
 
-	/**
+	/**	
 *	@brief 큐에 정보를 추가한다.
 *	@pre	temp는 포인터 형식이다.
 *	@post	큐에 temp가 입력된다.
