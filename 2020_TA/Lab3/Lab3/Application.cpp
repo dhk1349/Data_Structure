@@ -94,16 +94,17 @@ void Application::GetCommand()
 int Application::AddItem()
 {
 	// 입력받은 레코드를 리스트에 add, 리스트가 full일 경우는 add하지 않고 0을 리턴
-	if (m_MusicList.IsFull())
+	if (MasterList.IsFull())
 	{
 		cout << "List is full" << endl;
 		return 0;
 	}
 
 	ItemType item;
-
 	item.SetRecordFromKB();
-	m_MusicList.Add(item);
+	SimpleItemType s_item(item.GetData());
+	MasterList.Add(item);
+	
 
 	return 1;
 }

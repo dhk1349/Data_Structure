@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #include "_Library.h"
 
 class Application
@@ -9,8 +8,9 @@ private:
 	ofstream					m_OutFile;		///< output file descriptor.
 	int							m_Command;		///< current command number.
 
-	SortedList<ItemType>		m_MusicList;	///< music list.
-	CircularQueue<PlayItemType>	m_PlayList;		///< play list.
+	SortedList<ItemType>		MasterList;	///< music list.
+	SortedList<SimpleItemType> ContainerList;
+	TempType TempList;
 
 public:
 	/**

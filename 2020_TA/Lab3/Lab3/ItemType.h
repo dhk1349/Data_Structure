@@ -3,7 +3,7 @@
 #ifndef _ITEM_H
 #include "_Library.h"
 
-class ItemType :SimpleItemType {
+class ItemType{
 public:
 	ItemType() {}
 	~ItemType() {}
@@ -11,13 +11,23 @@ public:
 	int GetType();
 	string GetDate();
 	string GetName();
-
+	string GetPkey();
 	int GetNum();
+	
+	/*
+	Function below is made to extract necessary data from object to make SimpleItem Object.
+	우선 pkey만 리턴하도록 짰지만 이후에 방식 변경 가능.
+	*/
+	string GetData();
+
+	int SetRecordFromKB();
+
 
 private:
 	int type;
 	string date;
 	string name;
+	string pkey;
 	int num;
 };
 
