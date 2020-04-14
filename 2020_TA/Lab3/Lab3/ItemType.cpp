@@ -11,3 +11,13 @@ int ItemType::SetRecordFromKB() {
 
 	return 1;
 }
+
+bool ItemType::operator==(ItemType& object) {
+	if (this->GetPkey() == object.GetPkey()) {
+		return true;
+	}
+	else {
+		return false;
+	}
+
+}

@@ -22,6 +22,7 @@ public:
 
 	int SetRecordFromKB();
 
+	bool operator==(ItemType& object);
 
 private:
 	int type;
