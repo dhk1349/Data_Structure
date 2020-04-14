@@ -4,12 +4,10 @@
 class Application
 {
 private:
-	ifstream					m_InFile;		///< input file descriptor.
-	ofstream					m_OutFile;		///< output file descriptor.
 	int							m_Command;		///< current command number.
 
-	SortedList<ItemType>		MasterList;	///< music list.
-	SortedList<SimpleItemType> ContainerList;
+	SortedList<ItemType*> MasterList;	
+	SortedList<ContainerType*> ContainerList;
 	TempType TempList;
 
 public:
