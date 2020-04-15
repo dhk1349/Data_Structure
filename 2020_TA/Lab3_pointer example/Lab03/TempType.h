@@ -10,7 +10,7 @@ public:
 	~TempType();
 
 	void AddtItem(ItemType* _tItem);
-	void DequeueFromtItemList(ItemType* item);
+	ItemType* DequeueFromtItemList();
 	void PrinttItemList();
 
 };

@@ -167,3 +167,7 @@ SimpleItemType ItemType::GetSimpleData() {
 	SimpleData.SetRecord(GetId(), GetName());
 	return SimpleData; 
 }
+
+void ItemType::PrintInfo() {
+
+}

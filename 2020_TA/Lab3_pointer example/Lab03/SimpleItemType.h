@@ -12,7 +12,7 @@ public:
 	string GetName() const;
 
 	void SetId(int _id);
-	void SetName(string _name);
+	void SetName(string _name);	
 	void SetRecord(int _id, string _name);
 
 	void SetIdFromKB();

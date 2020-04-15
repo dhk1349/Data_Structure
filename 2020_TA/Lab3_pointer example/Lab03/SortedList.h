@@ -101,6 +101,8 @@ int SortedList<T>::Add(const T & inData)
 	{
 		m_Array[m_Length] = inData;
 		m_Length++;
+		//cout << "Added on sorted list\n";
+		//cout << inData.GetId() << endl;
 		return 1;
 	}
 	else
@@ -138,9 +140,9 @@ int SortedList<T>::Get(T & data)
 	for (int i = 0; i < m_Length; i++)
 	{
 		if (m_Array[i] == data)
-		{
 			data = m_Array[i];
 			return 1;
+		{
 		}
 	}
 	return 0;

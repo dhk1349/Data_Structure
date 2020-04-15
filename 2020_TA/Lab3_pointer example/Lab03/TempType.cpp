@@ -16,10 +16,14 @@ void TempType::AddtItem(ItemType* _tItem)
 	numOfItems++;
 }
 
-void TempType::DequeueFromtItemList(ItemType* item)
+ItemType* TempType::DequeueFromtItemList()
 {
-	tItemList.DeleteFrCircularQueue(item);
+	ItemType* tmp;
+	tmp = new ItemType;
+
+	tItemList.DeleteFrCircularQueue(tmp);
 	numOfItems--;
+	return tmp;
 }
 
 void TempType::PrinttItemList()

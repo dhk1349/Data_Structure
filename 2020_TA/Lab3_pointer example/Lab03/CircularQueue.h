@@ -54,7 +54,7 @@ public:
 	*	@pre	Queue has been initialized.
 	*	@post	If (queue is empty), EmptyQueue exception is thrown; otherwise, first element has been removed from queue. item gets value of removed item.
 	*/
-	void DeleteFrCircularQueue(T item);
+	void DeleteFrCircularQueue(T& item);
 
 	/**
 	*	@brief	Print all the items in the queue on screen
@@ -143,7 +143,7 @@ void CircularQueue<T>::AddToCircularQueue(T item)
 }
 
 template<typename T>
-void CircularQueue<T>::DeleteFrCircularQueue(T item)
+void CircularQueue<T>::DeleteFrCircularQueue(T& item)
 {
 	if (IsEmpty())
 		return ;
@@ -161,18 +161,21 @@ void CircularQueue<T>::PlayInsertOrder()
 	{
 		for (int i = m_iFront + 1; i < m_nMaxQueue; i++)
 		{
-			cout << m_pItems[i] << " - ";
+			cout << m_pItems[i]<<endl;
+			cout << *m_pItems[i]<<endl<<endl;
 		}	//m_iFront 다음 항목부터 배열의 끝까지 출력한다.
 		for (int i = 0; i <= m_iRear; i++)
 		{
-			cout << m_pItems[i] << " - ";
+			cout << m_pItems[i] << endl;
+			cout << *m_pItems[i] << endl << endl;
 		}	//배열의 처음부터 m_iRear까지 출력해준다.
 	}
 	else	//m_iRear가 m_iFront보다 클때
 	{
 		for (int i = m_iFront + 1; i <= m_iRear; i++)
 		{
-			cout << m_pItems[i] << " - ";
+			cout << m_pItems[i] << endl;
+			cout << *m_pItems[i] << endl << endl;
 		}	//m_iFront+1에서부터 m_iRear까지 출력
 	}
 	cout << endl;

@@ -6,11 +6,11 @@ private:
 	ofstream					m_OutFile;		///< output file descriptor.
 	int							m_Command;		///< current command number.
 
-	SortedList<ItemType*>		MasterList;		///< master list.
+	SortedList_p<ItemType*>		MasterList;		///< master list.
 	SortedList<ContainerType>	ContainerList;	///< constainer list.
 	TempType					TempList;		///< temp item list.
 
-public:
+public: 
 	/**
 	*	constructor.
 	*/
@@ -137,5 +137,5 @@ public:
 	void DisplayAllDetailsItem();
 
 	//dhk1349
-	void Reorganizetlist();
+	//void AddSubC();
 };

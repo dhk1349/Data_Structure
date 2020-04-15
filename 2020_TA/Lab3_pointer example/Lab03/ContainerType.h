@@ -1,12 +1,13 @@
 #pragma once
+#include "SortedListWithPointer.h"
 class ContainerType
 {
 private:
-	int								id;
+	int							id;
 	string							position;
 	UnsortedList<SimpleItemType>	sItemList;
 	UnsortedList<string>			photoList;
-
+	SortedList<ContainerType> *SubContainerList;
 public:
 	ContainerType();
 	~ContainerType();
@@ -29,7 +30,11 @@ public:
 
 	void DisplayAllPhoto();
 	void DisplayAllsItem();
-	void DisplayAllDetailsItem(SortedList<ItemType*>& ref);
+	void DisplayAllDetailsItem(SortedList_p<ItemType*> ref);
+
+	//dhk1349
+	void DisplySubContainers();
+	void AddSubContainer();
 
 	bool operator==(const ContainerType& _item) {
 		if (id == _item.GetId())

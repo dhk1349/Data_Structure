@@ -46,6 +46,8 @@ public:
 	int ReadDataFromFile(ifstream& fin);
 	int WriteDataToFile(ofstream& fout);
 
+	void PrintInfo();
+
 	bool operator==(const ItemType& _item) {
 		if (id == _item.GetId())
 			return true;
@@ -78,6 +80,7 @@ public:
 		os << "\tContainer   : " << _item.GetContainerID() << endl;
 		return os;
 	}
+	/*
 	friend ostream& operator<<(ostream& os, ItemType* _item) {
 		os << "\tID   : " << _item->GetId() << endl;
 		os << "\tKind   : " << _item->GetKind() << endl;
@@ -87,5 +90,6 @@ public:
 		os << "\tContainer   : " << _item->GetContainerID() << endl;
 		return os;
 	}
+	*/
 };
 

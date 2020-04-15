@@ -68,9 +68,9 @@ void Application::Run()
 		case 16:
 			DisplayAllDetailsItem();
 			break;
-		case 17:
-			Reorganizetlist();
-			break;
+		//case 17:
+			//AddSubC();
+			//break;
 		case 0:
 			return;
 		default:
@@ -104,7 +104,7 @@ void Application::GetCommand()
 	cout << "\t   15 : DisplayAllsItem" << endl;
 	cout << "\t   16 : DisplayAllDetailsItem" << endl;
 	cout << "\t---------------------- " << endl;
-	cout << "\t   17 : Temp list 정리하기" << endl;
+	cout << "\t   17 : SubContainer추가하기" << endl;
 	cout << "\t   0 : Quit" << endl;
 
 	cout << endl << "\t Choose a Command--> ";
@@ -139,7 +139,7 @@ int Application::AddItem()
 		//tmpsItem.SetId(item->GetId());
 		//tmpsItem.SetName(item->GetName());
 
-		if (ContainerList.Get(tmpContainer) == 1) { //Container 존재할때
+		if (ContainerList.Get(tmpContainer)== -1) { //Container 존재할때
 			tmpContainer.AddsItem(tmpsItem);
 			ContainerList.Replace(tmpContainer);
 		}
@@ -180,11 +180,13 @@ int Application::AddItem(ItemType* item)
 		//tmpsItem.SetId(item->GetId());
 		//tmpsItem.SetName(item->GetName());
 
-		if (ContainerList.Get(tmpContainer) == 1) { //Container 존재할때
+		if (ContainerList.Get(tmpContainer)== 1) { //Container 존재할때
 			tmpContainer.AddsItem(tmpsItem);
 			ContainerList.Replace(tmpContainer);
 		}
 		else { //Container 존재하지 않을때
+			cout << "creating container..\n";
+			cout << "adding " << tmpsItem.GetName() << endl << endl;
 			tmpContainer.AddsItem(tmpsItem);
 			ContainerList.Add(tmpContainer);
 		}
@@ -205,7 +207,8 @@ void Application::DisplayAllItem()
 	int curIndex = MasterList.GetNextItem(data);
 	while (curIndex < length && curIndex != -1)
 	{
-		cout << data;
+		cout <<"\tAddr: "<< data<<endl;
+		cout << *data;
 		curIndex = MasterList.GetNextItem(data);
 	}
 }
@@ -414,8 +417,12 @@ void Application::DequeueFromtItemList()
 	ItemType* tmpItem;
 	tmpItem = new ItemType;
 
-	TempList.DequeueFromtItemList(tmpItem);
+	tmpItem=TempList.DequeueFromtItemList();
+	cout << tmpItem << endl;
 	tmpItem->SetContainerIDFromKB();
+	
+	cout << "Info Update\n";
+	cout << tmpItem;
 	AddItem(tmpItem);
 }
 
@@ -469,7 +476,10 @@ void Application::DisplayAllsItem()
 	ContainerType tmpContainer;
 	tmpContainer.SetIdFromKB();
 
-	ContainerList.Get(tmpContainer);
+	if (ContainerList.Get(tmpContainer)==0) {
+		cout << "container not found\n";
+	}
+	else { cout << "Container Found\n"; }
 
 	tmpContainer.DisplayAllsItem();
 }
@@ -479,12 +489,16 @@ void Application::DisplayAllDetailsItem()
 	ContainerType tmpContainer;
 	tmpContainer.SetIdFromKB();
 
-	ContainerList.Get(tmpContainer);
+	if (ContainerList.Get(tmpContainer) == 1) { cout << "container Found\n"; }
+	else { cout << "Container not found\n"; }
 
 	tmpContainer.DisplayAllDetailsItem(MasterList);
 }
+/*
+void Application::AddSubC() {
+	ContainerType tmpcont;
+	cout << "Container 지정: \n";
+	tmpcont.SetIdFromKB();
 
-void Application::Reorganizetlist() {
-	//temp list를 dequeue해서 ContainerId 넣어주기.
-	
-}
+	ContainerList.GetByBinarySearch()
+}*/

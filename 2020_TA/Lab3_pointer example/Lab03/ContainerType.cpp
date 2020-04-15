@@ -5,6 +5,7 @@ ContainerType::ContainerType()
 {
 	id = -1;
 	position = "";
+	SubContainerList = nullptr;
 }
 
 ContainerType::~ContainerType()
@@ -81,10 +82,15 @@ void ContainerType::DisplayAllPhoto()
 
 void ContainerType::DisplayAllsItem()
 {
-	cout << sItemList;
+	SimpleItemType tmpItem;
+	sItemList.ResetList();
+	while (sItemList.GetNextItem(tmpItem) != -1) {
+	
+		cout << tmpItem << endl;
+	}
 }
 
-void ContainerType::DisplayAllDetailsItem(SortedList<ItemType*>& ref)
+void ContainerType::DisplayAllDetailsItem(SortedList_p<ItemType*> ref)
 {
 	SimpleItemType tmpItem;
 	sItemList.ResetList();
@@ -93,7 +99,35 @@ void ContainerType::DisplayAllDetailsItem(SortedList<ItemType*>& ref)
 		detail = new ItemType;
 
 		detail->SetId(tmpItem.GetId());
-		ref.Get(detail);
-		cout << detail;
+		if (ref.Get(detail) == 1) {
+			cout << "printing item\n";
+			cout <<"\tAddr: " <<detail<<endl;
+			cout << *detail << endl;
+		}
+		else { cout << "Not same container\n"; }
 	}
+}
+
+void ContainerType::DisplySubContainers() {
+	/*
+	ContainerType subcont;
+	SubContainerList->ResetList();
+
+	while (SubContainerList->GetNextItem(subcont) != -1) {
+		cout<<subcont.GetId()<<endl;
+		cout<<subcont.GetPosition()<<endl;
+		cout << "\t>>SubContainer의 ITEM목록을 출력하는 함수 작성.\n" << endl;
+	}
+	*/
+}
+
+
+void ContainerType::AddSubContainer() {
+	/*
+	ContainerType SubContainer;
+	SubContainer.SetRecordFromKB();
+	SubContainer.SetId(GetId()*100+SubContainer.GetId());
+	SubContainer.SetPosition(GetPosition()+"_"+SubContainer.GetPosition());
+	SubContainerList->Add(SubContainer);
+	*/
 }
